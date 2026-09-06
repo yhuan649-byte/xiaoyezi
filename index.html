@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>幻叶的二次元画廊 • AI Anime Gallery by Huan Ye</title>
+    <!-- Google Fonts for Anime Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff7eb9;
+            --secondary: #7afcff;
+            --accent: #fee140;
+            --bg-dark: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-main: #f0f2f5;
+            --text-sub: #a0a5b5;
+            --glow-pink: rgba(255, 126, 185, 0.4);
+            --glow-blue: rgba(122, 252, 255, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Noto Sans SC', 'Outfit', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Canvas Particle Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot, .cursor-circle {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .cursor-circle {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid var(--secondary);
+            transition: transform 0.15s ease-out, opacity 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-circle { display: none; }
+        }
+
+        /* Decorative Floating Glows */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatOrb 12s infinite alternate ease-in-out;
+        }
+        .glow-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--glow-pink) 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+        }
+        .glow-orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--glow-blue) 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -6s;
+        }
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 80px) scale(1.15); }
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / Banner Section */
+        header {
+            text-align: center;
+            padding: 4rem 1rem 3rem 1rem;
+            position: relative;
+        }
+        .header-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            background: linear-gradient(135deg, rgba(255,126,185,0.15), rgba(122,252,255,0.15));
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--secondary);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .header-title {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
+            letter-spacing: -1px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .header-subtitle {
+            font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+            color: var(--text-sub);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+            animation: fadeInUp 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .author-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .author-name {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Gallery Grid Showcase */
+        .gallery-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        /* Gallery Item Card */
+        .gallery-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+            opacity: 0;
+            transform: translateY(50px);
+            position: relative;
+        }
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gallery-item:nth-child(even) {
+            grid-template-columns: 1fr 1fr;
+        }
+        .gallery-item:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 30px var(--glow-pink);
+        }
+
+        /* Image Box with Tilt Effect */
+        .image-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 3 / 4;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            background: #15171e;
+        }
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+        }
+        .image-wrapper:hover img {
+            transform: scale(1.06);
+            filter: brightness(1.08) contrast(1.02);
+        }
+        
+        /* Shimmer Glow Overlay on Image Hover */
+        .image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-25deg);
+            transition: 0.75s ease;
+        }
+        .image-wrapper:hover::after {
+            left: 150%;
+        }
+
+        /* AI Generated Overlay Tag on Image */
+        .ai-watermark {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(11, 12, 16, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            z-index: 2;
+        }
+
+        /* Expand Icon Overlay */
+        .expand-badge {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(11, 12, 16, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .image-wrapper:hover .expand-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Info Section */
+        .info-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.2rem;
+            position: relative;
+        }
+        .info-header {
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 1rem;
+        }
+        .item-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .item-number::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            box-shadow: 0 0 8px var(--secondary);
+        }
+        .item-title-cn {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.5px;
+        }
+        .item-title-en {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Story Text (70% CN / 30% EN Ratio balanced) */
+        .story-box {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid var(--primary);
+            padding: 1.2rem;
+            border-radius: 0 12px 12px 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .story-quote-en {
+            font-family: 'Sacramento', cursive;
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-top: 0.6rem;
+            display: block;
+            opacity: 0.9;
+        }
+
+        /* Meta Features / Tags */
+        .meta-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+        .tag {
+            font-size: 0.78rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-sub);
+            transition: all 0.3s ease;
+        }
+        .tag-ai {
+            background: rgba(255, 126, 185, 0.12);
+            border-color: rgba(255, 126, 185, 0.3);
+            color: var(--primary);
+        }
+        .gallery-item:hover .tag {
+            border-color: rgba(255, 126, 185, 0.3);
+            color: #fff;
+        }
+
+        /* Interactive Action Buttons */
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .action-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 0.6rem 1.4rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(5px);
+        }
+        .action-btn:hover {
+            background: linear-gradient(135deg, var(--primary), #ff4e97);
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(255, 126, 185, 0.4);
+            transform: translateY(-2px);
+        }
+        .action-btn.liked {
+            background: linear-gradient(135deg, #ff4e97, #ff1a75);
+            border-color: transparent;
+            color: #fff;
+        }
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+        .action-btn:hover svg {
+            transform: scale(1.2);
+        }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 6, 8, 0.92);
+            backdrop-filter: blur(25px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .lightbox-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 88vh;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,126,185,0.3);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            object-fit: contain;
+        }
+        .lightbox-modal.active .lightbox-content {
+            transform: scale(1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            color: #fff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .lightbox-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            color: var(--primary);
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem 1.5rem 1rem;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 5rem;
+        }
+        footer p {
+            margin-bottom: 0.4rem;
+        }
+        .heart-icon {
+            color: var(--primary);
+            display: inline-block;
+            animation: heartBeat 1.5s infinite ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+
+        /* Responsive Design Adaptation */
+        @media (max-width: 992px) {
+            .gallery-item, .gallery-item:nth-child(even) {
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
+                padding: 1.5rem;
+            }
+            .image-wrapper {
+                aspect-ratio: 4 / 5;
+                max-height: 520px;
+            }
+            .header-title { font-size: 2.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 1rem 1rem 3rem 1rem; }
+            header { padding: 2.5rem 0.5rem 1.5rem 0.5rem; }
+            .item-title-cn { font-size: 1.4rem; }
+            .story-box { font-size: 0.88rem; padding: 1rem; }
+            .action-btn { width: 100%; justify-content: center; }
+            .card-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Particle Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Ambient Glowing Orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Custom Floating Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Header Banner Section -->
+        <header>
+            <div class="header-tag">✦ AI ART GALLERY COLLECTION ✦</div>
+            <h1 class="header-title">幻叶的梦境画廊</h1>
+            <p class="header-subtitle">
+                探索二次元幻想世界的绚丽时刻。由作者 <span class="author-name">幻叶</span> 带来的独家 AI 艺术作品展示，融合纯真治愈与未来潮流，在光影交织的维度中感受每一个角色的温存故事。
+            </p>
+            <div class="author-badge">
+                🎨 Created by <span class="author-name">幻叶 (Huan Ye)</span> • AI Generated Artwork
+            </div>
+        </header>
+
+        <!-- Gallery Items Stream (Direct Display) -->
+        <div class="gallery-grid">
+
+            <!-- Card 1: Cat Girls -->
+            <article class="gallery-item" data-tilt>
+                <div class="image-wrapper" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9b85b96.webp')">
+                    <div class="ai-watermark">✨ AI 生成</div>
+                    <img src="https://picui.ogmua.cn/s1/2026/09/06/6a9cde9b85b96.webp" alt="Little Cat Girls" loading="lazy">
+                    <div class="expand-badge">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15 3l2.3 2.3-3.89 3.89 1.42 1.42L18.7 6.7 21 9V3h-6zM9 21L6.7 18.7l3.89-3.89-1.42-1.42L5.3 17.3 3 15v6h6z"/></svg>
+                        点击查看原图
+                    </div>
+                </div>
+                <div class="info-wrapper">
+                    <div class="info-header">
+                        <div class="item-number">EXHIBIT #01 • WARMTH</div>
+                        <h2 class="item-title-cn">绒雪与夜羽 • 猫耳双子</h2>
+                        <div class="item-title-en">LITTLE CAT GIRLS — Cute x Warm x Forever</div>
+                    </div>
+                    <div class="story-box">
+                        在银装素裹的冬日小屋里，白发的“绒雪”总是带着微醺般的害羞躲在棉服里，而黑发的“夜羽”则最喜欢依偎在她身边轻抚温暖。两只小猫娘在慵懒的午后紧紧贴在一起，享受着独属于彼此的温存与永恒守护。
+                        <span class="story-quote-en">"Together is the sweetest place in the world."</span>
+                    </div>
+                    <div class="meta-tags">
+                        <span class="tag tag-ai">🤖 AI生成</span>
+                        <span class="tag">#双人贴贴</span>
+                        <span class="tag">#萌系治愈</span>
+                        <span class="tag">#猫耳少女</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="toggleLike(this)">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="like-count">1,280</span> 喜欢
+                        </button>
+                        <button class="action-btn" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9b85b96.webp')">
+                            全屏欣赏
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 2: Green Leaf Girl -->
+            <article class="gallery-item" data-tilt>
+                <div class="image-wrapper" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c4210d.webp')">
+                    <div class="ai-watermark">✨ AI 生成</div>
+                    <img src="https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c4210d.webp" alt="Green Leaf Girl" loading="lazy">
+                    <div class="expand-badge">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15 3l2.3 2.3-3.89 3.89 1.42 1.42L18.7 6.7 21 9V3h-6zM9 21L6.7 18.7l3.89-3.89-1.42-1.42L5.3 17.3 3 15v6h6z"/></svg>
+                        点击查看原图
+                    </div>
+                </div>
+                <div class="info-wrapper">
+                    <div class="info-header">
+                        <div class="item-number">EXHIBIT #02 • NATURE</div>
+                        <h2 class="item-title-cn">森林微风 • 翠叶少女</h2>
+                        <div class="item-title-en">GREEN LEAF — A Soft Wind Brings New Stories</div>
+                    </div>
+                    <div class="story-box">
+                        绿发微卷的少女安详地坐在洒满阳光的庭院石阶上，微风轻拂过树梢，带起她的清纯裙摆与缕缕发丝。她的眼神中闪烁着清澈与沉静，在喧嚣的世界之外，独自守护着心中那一抹宁静而美好的森林诗篇。
+                        <span class="story-quote-en">"In a world of noise, she keeps her own quiet beauty."</span>
+                    </div>
+                    <div class="meta-tags">
+                        <span class="tag tag-ai">🤖 AI生成</span>
+                        <span class="tag">#清新水彩</span>
+                        <span class="tag">#森林系</span>
+                        <span class="tag">#纯真少女</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="toggleLike(this)">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="like-count">964</span> 喜欢
+                        </button>
+                        <button class="action-btn" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c4210d.webp')">
+                            全屏欣赏
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 3: LUMI Bright Soul -->
+            <article class="gallery-item" data-tilt>
+                <div class="image-wrapper" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c835bf.webp')">
+                    <div class="ai-watermark">✨ AI 生成</div>
+                    <img src="https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c835bf.webp" alt="LUMI Bright Soul" loading="lazy">
+                    <div class="expand-badge">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15 3l2.3 2.3-3.89 3.89 1.42 1.42L18.7 6.7 21 9V3h-6zM9 21L6.7 18.7l3.89-3.89-1.42-1.42L5.3 17.3 3 15v6h6z"/></svg>
+                        点击查看原图
+                    </div>
+                </div>
+                <div class="info-wrapper">
+                    <div class="info-header">
+                        <div class="item-number">EXHIBIT #03 • VIBRANT</div>
+                        <h2 class="item-title-cn">绚彩霓光 • 活力露米</h2>
+                        <div class="item-title-en">LUMI BRIGHT SOUL — Shine Together & Bright World</div>
+                    </div>
+                    <div class="story-box">
+                        16岁的露米是街头潮流的核心焦点。荧光黄绿外套与亮眼的双色短发彰显着她永不熄灭的活力与热忱。只要有她在场，周遭的空气都会变得轻快、欢畅，无时无刻不在用笑容散发着耀眼的正能量。
+                        <span class="story-quote-en">"The whole universe shines brighter because of your glow."</span>
+                    </div>
+                    <div class="meta-tags">
+                        <span class="tag tag-ai">🤖 AI生成</span>
+                        <span class="tag">#街头潮流</span>
+                        <span class="tag">#荧光美学</span>
+                        <span class="tag">#活力少女</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="toggleLike(this)">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="like-count">2,150</span> 喜欢
+                        </button>
+                        <button class="action-btn" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9c835bf.webp')">
+                            全屏欣赏
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 4: LUMI Star Beast -->
+            <article class="gallery-item" data-tilt>
+                <div class="image-wrapper" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9d1e343.webp')">
+                    <div class="ai-watermark">✨ AI 生成</div>
+                    <img src="https://picui.ogmua.cn/s1/2026/09/06/6a9cde9d1e343.webp" alt="LUMI Star Beast" loading="lazy">
+                    <div class="expand-badge">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15 3l2.3 2.3-3.89 3.89 1.42 1.42L18.7 6.7 21 9V3h-6zM9 21L6.7 18.7l3.89-3.89-1.42-1.42L5.3 17.3 3 15v6h6z"/></svg>
+                        点击查看原图
+                    </div>
+                </div>
+                <div class="info-wrapper">
+                    <div class="info-header">
+                        <div class="item-number">EXHIBIT #04 • FANTASY</div>
+                        <h2 class="item-title-cn">幻蓝星兽 • 坠星露米</h2>
+                        <div class="item-title-en">LUMI STAR BEAST — Little Star, Big Dreams</div>
+                    </div>
+                    <div class="story-box">
+                        来自璀璨星海深处的神秘星兽形态。披着冰蓝色兜帽与夜空星辰印记的露米，身形娇小却蕴藏着穿梭银河的梦幻魔力。她静静坐在冰晶交织的月亮座架之上，守护着凡间每一个关于繁星与牛奶的甜蜜梦境。
+                        <span class="story-quote-en">"A small star fell to the human world, carrying endless dreams."</span>
+                    </div>
+                    <div class="meta-tags">
+                        <span class="tag tag-ai">🤖 AI生成</span>
+                        <span class="tag">#星空兽耳朵</span>
+                        <span class="tag">#冰蓝梦幻</span>
+                        <span class="tag">#奇幻角色</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="toggleLike(this)">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="like-count">3,410</span> 喜欢
+                        </button>
+                        <button class="action-btn" onclick="openLightbox('https://picui.ogmua.cn/s1/2026/09/06/6a9cde9d1e343.webp')">
+                            全屏欣赏
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox()">
+        <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="Enlarged View" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Created with <span class="heart-icon">♥</span> by <strong>幻叶 (Huan Ye)</strong> • 幻梦二次元 AI 画廊</p>
+        <p style="opacity: 0.6; font-size: 0.75rem;">© 2026 Huan Ye Showcase. All Featured Artworks Are AI Generated (AI 艺术创作展示).</p>
+    </footer>
+
+    <!-- JavaScript Interactive Effects -->
+    <script>
+        // 1. Particle Canvas System
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4 - 0.2;
+                this.alpha = Math.random() * 0.6 + 0.2;
+                this.color = Math.random() > 0.5 ? '#ff7eb9' : '#7afcff';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 2. Custom Cursor Follower
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+
+        window.addEventListener('mousemove', (e) => {
+            const { clientX: x, clientY: y } = e;
+            cursorDot.style.opacity = '1';
+            cursorCircle.style.opacity = '1';
+            
+            cursorDot.style.left = `${x}px`;
+            cursorDot.style.top = `${y}px`;
+
+            cursorCircle.animate({
+                left: `${x}px`,
+                top: `${y}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // 3. Scroll Reveal Animation (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // 4. 3D Tilt Card Interaction Effect
+        document.querySelectorAll('[data-tilt]').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(0)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+            });
+        });
+
+        // 5. Lightbox Preview Modal System
+        const lightboxModal = document.getElementById('lightbox-modal');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(imgSrc) {
+            lightboxImg.src = imgSrc;
+            lightboxModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightboxModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ESC key to close Lightbox
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // 6. Interactive Heart Like Counter Effect
+        function toggleLike(button) {
+            const countSpan = button.querySelector('.like-count');
+            let currentCount = parseInt(countSpan.innerText.replace(',', ''));
+            
+            if (button.classList.contains('liked')) {
+                button.classList.remove('liked');
+                currentCount -= 1;
+            } else {
+                button.classList.add('liked');
+                currentCount += 1;
+                createBurstParticles(button);
+            }
+            countSpan.innerText = currentCount.toLocaleString();
+        }
+
+        function createBurstParticles(target) {
+            const rect = target.getBoundingClientRect();
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.style.position = 'fixed';
+                p.style.left = `${rect.left + rect.width / 2}px`;
+                p.style.top = `${rect.top + rect.height / 2}px`;
+                p.style.width = '6px';
+                p.style.height = '6px';
+                p.style.background = '#ff4e97';
+                p.style.borderRadius = '50%';
+                p.style.pointerEvents = 'none';
+                p.style.zIndex = '9999';
+                document.body.appendChild(p);
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 30 + Math.random() * 40;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist;
+
+                p.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 600,
+                    easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+                }).onfinish = () => p.remove();
+            }
+        }
+    </script>
+</body>
+</html>
