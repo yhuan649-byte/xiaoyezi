@@ -8,10 +8,12 @@
 <title>AETHERIA · 萌叶幻想物语</title>
 <link rel="stylesheet" href="./style.css">
 <script src="./app.js" defer></script>
+<script src="./effects.js" defer></script>
 </head>
 <body>
+<canvas id="stardust" aria-hidden="true"></canvas>
 <div class="aurora" aria-hidden="true"></div>
-<header class="topbar"><a class="brand" href="#home">✧ AETHERIA<small>萌叶幻想物语</small></a><button id="sound" class="quiet" aria-pressed="false">音效：关</button></header>
+<header class="topbar"><a class="brand" href="#home">✧ AETHERIA<small>萌叶幻想物语</small></a><div class="top-controls"><button id="sensors" class="quiet" aria-pressed="false">✧ 开启感应</button><button id="sound" class="quiet" aria-pressed="false">音效：关</button></div></header>
 <main id="app" tabindex="-1"></main>
 <nav class="navigation" aria-label="主导航"><a href="#home">⌂<span>首页</span></a><a href="#gallery">❀<span>图鉴</span></a><a href="#world">✧<span>世界</span></a><a href="#favorites">♡<span>收藏</span></a></nav>
 <div id="notice" role="status" aria-live="polite"></div>
