@@ -1,154 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#eef1e6">
-<meta name="description" content="夏日慢车 · 小叶子的 2.5D 幻想车窗。倾斜手机，让风景、人物、猫咪与光影一起苏醒。">
-<title>夏日慢车 · AETHERIA</title>
-<style>
-:root{--ink:#29493c;--muted:#778176;--gold:#b39a66;--paper:#f4f5ed;--line:#d9dece;--green:#476e55}
-*{box-sizing:border-box}body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 8% 8%,#e4ead9,transparent 45%),radial-gradient(ellipse at 90% 70%,#e8eee8,transparent 45%),var(--paper);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #a6b992;outline-offset:4px}h1,h2,h3,p{margin:0}h1,h2,h3,.wordmark{font-family:Georgia,"Songti SC",serif;font-weight:400}.shell{max-width:1250px;margin:auto;padding:0 28px}header{display:flex;justify-content:space-between;align-items:center;padding:25px 0;border-bottom:1px solid var(--line);gap:16px}.wordmark{letter-spacing:.18em;font-size:22px}.wordmark small{display:block;letter-spacing:.12em;font:10px sans-serif;color:var(--muted);margin-top:3px}.edition{font:11px Georgia,serif;letter-spacing:.2em;color:var(--gold)}.intro{display:flex;justify-content:space-between;align-items:end;gap:30px;padding:36px 0 27px}.eyebrow{font:10px Georgia,serif;letter-spacing:.22em;color:#978250;margin-bottom:12px}.intro h1{font-size:clamp(30px,4vw,49px);letter-spacing:.05em}.intro p{font-size:13px;color:var(--muted);max-width:300px}.intro h1 em{font-style:normal;color:#8b9b74}.stage-wrap{position:relative;padding:8px;border:1px solid #b5b796;background:#ffffff70;border-radius:24px;box-shadow:0 22px 60px #3e56321a;perspective:1200px}.stage{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:17px;background:#dce9d7;isolation:isolate;touch-action:pan-y pinch-zoom}.stage canvas{display:block;width:100%;height:100%;transition:filter .65s;transform-origin:center;will-change:transform}.stage:after{content:"";position:absolute;inset:12px;border:1px solid #fff8;border-radius:9px;pointer-events:none}.scene-label{position:absolute;top:27px;left:27px;color:#fff;text-shadow:0 1px 12px #294331;z-index:2;pointer-events:none}.scene-label span{display:block;font:10px Georgia,serif;letter-spacing:.25em}.scene-label b{font-family:Georgia,"Songti SC",serif;display:block;font-weight:400;font-size:20px;letter-spacing:.09em;margin-top:5px}.scene-caption{position:absolute;bottom:22px;left:24px;right:24px;z-index:2;display:flex;justify-content:space-between;align-items:end;gap:14px;pointer-events:none;color:#fff;text-shadow:0 2px 10px #18382d}.scene-caption p{font-family:Georgia,"Songti SC",serif;font-size:17px;letter-spacing:.08em}.scene-caption small{font-size:10px;letter-spacing:.1em}.scene-caption .stamp{font:11px Georgia,serif;border:1px solid #fff9;border-radius:50%;width:52px;height:52px;display:grid;place-content:center;line-height:1.5;text-align:center}.loading{position:absolute;inset:0;z-index:5;background:#eaf0e4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:30px;text-align:center}.loading strong{font:24px Georgia,serif;color:#8ca175}.loading p{font-size:13px;color:var(--muted)}.loading[hidden]{display:none}.loading progress{width:160px;height:5px;accent-color:var(--green)}.stage-open{position:absolute;top:20px;right:20px;z-index:4;width:42px;height:42px;border-radius:50%;border:1px solid #ffffffaa;background:#ffffffb5;color:var(--ink);font-size:20px}.controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:20px 0 12px}.controls-left{display:flex;flex-wrap:wrap;gap:9px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:24px;border:1px solid #c8d2c0;background:#ffffff99;color:var(--ink);font-size:12px;gap:7px}.btn.primary{background:var(--green);color:white;border-color:var(--green)}.btn[aria-pressed=true]:not(.primary){background:#dfe7d4;border-color:#91a680}.status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}.status:before{content:"";width:6px;height:6px;border-radius:50%;background:#a9b89b}.status.live:before{background:#55856a;box-shadow:0 0 0 4px #83a17722}.instruction{font-size:11px;color:var(--muted);margin:3px 0 25px}.meta-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;gap:15px;margin:20px 0 35px}.meta-strip div{display:flex;align-items:center;gap:15px}.meta-strip b{font:23px Georgia,serif;color:#a99974}.meta-strip span{font-size:12px}.meta-strip small{display:block;font-size:10px;color:var(--muted)}.story-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;margin:32px 0}.story-card{border:1px solid #fff;background:#ffffff75;padding:30px;border-radius:18px}.story-card h2{font-size:25px;margin-bottom:15px}.story-card p{font-size:13px;color:var(--muted);line-height:2}.signature{font:italic 20px Georgia,serif;color:var(--gold);display:block;margin-top:18px}.ticket{background:linear-gradient(130deg,#faf7ea,#f1f3e7);border:1px solid #dbd4ba;border-radius:18px;padding:28px;position:relative}.ticket small{font:10px Georgia,serif;letter-spacing:.15em;color:var(--gold)}.ticket h2{font-size:24px;margin:10px 0 22px}.ticket .route{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed #c4bba1;border-bottom:1px dashed #c4bba1;padding:18px 0;gap:10px}.ticket .route span{font-size:14px}.ticket p{font-size:11px;color:var(--muted);margin-top:18px}.settings{border-top:1px solid var(--line);margin:28px 0;padding:22px 0}.settings summary{cursor:pointer;font-size:13px}.settings-content{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:25px 0}.settings label{font-size:12px;display:block}.settings input[type=range]{width:100%;accent-color:var(--green);margin:12px 0}.toggles{display:flex;flex-wrap:wrap;gap:15px;margin:15px 0}.toggles label{display:flex;align-items:center;gap:7px}.toggles input{accent-color:var(--green)}#files-list{font-size:11px;color:var(--muted);overflow-wrap:anywhere;padding-left:20px}#files-list .bad{color:#a54837}.settings p{font-size:11px;color:var(--muted)}footer{padding:24px 0 40px;text-align:center;border-top:1px solid var(--line);font:10px Georgia,serif;color:#8a967f;letter-spacing:.2em}#toast{position:fixed;bottom:max(25px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:90%;z-index:50;padding:12px 20px;background:#2f493eef;color:#fff;border-radius:16px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .2s}#toast.show{opacity:1}.exit-handle{display:none}.immersive{overflow:hidden;overscroll-behavior:none}.immersive .stage-wrap{position:fixed;inset:0;z-index:30;padding:0;border:0;border-radius:0;background:#1c342b;display:flex;align-items:center;justify-content:center}.immersive .stage{width:100%;height:100%;aspect-ratio:auto;border-radius:0}.immersive .exit-handle{display:flex;position:absolute;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:10;align-items:center;flex-direction:column;gap:5px;background:#20382b77;border:1px solid #ffffff44;border-radius:20px;color:white;padding:10px 25px;touch-action:none}.exit-handle span{width:40px;height:4px;border-radius:5px;background:#fff9}.exit-handle small{font-size:9px}.immersive .stage-open{top:max(18px,env(safe-area-inset-top))}.immersive .scene-label{top:85px}.immersive .scene-caption{bottom:max(30px,env(safe-area-inset-bottom))}.static .stage canvas{will-change:auto}@media(max-width:650px){.shell{padding:0 16px}header{padding:19px 0}.wordmark{font-size:18px}.edition{font-size:9px}.intro{display:block;padding:27px 2px 23px}.intro h1{font-size:35px}.intro p{margin-top:13px;font-size:12px;max-width:none}.stage{aspect-ratio:4/5}.stage-wrap{padding:5px;border-radius:20px}.stage{border-radius:15px}.scene-label{top:22px;left:20px}.scene-label b{font-size:16px}.scene-caption{left:18px;right:18px;bottom:17px}.scene-caption p{font-size:14px}.scene-caption .stamp{width:40px;height:40px;font-size:9px}.controls{gap:13px}.controls-left{gap:6px;width:100%}.btn{padding:9px 13px;font-size:11px}.status{padding-left:4px}.meta-strip{gap:7px}.meta-strip div{display:block;text-align:center}.meta-strip b{display:block;margin-bottom:7px;font-size:20px}.meta-strip span{font-size:11px}.meta-strip small{font-size:9px}.story-grid,.settings-content{grid-template-columns:1fr;gap:16px}.story-card,.ticket{padding:24px}.stage-open{top:17px;right:17px;width:35px;height:35px}.settings{margin-top:20px}.immersive .stage{height:100dvh}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
+<meta name="theme-color" content="#48725e">
+<meta name="description" content="萌叶幻想物语：与幻叶、小叶子、双生少女和呆呆一起，收藏微风里的温柔。">
+<title>AETHERIA · 萌叶幻想物语</title>
+<link rel="stylesheet" href="./style.css">
+<script src="./app.js" defer></script>
+<script src="./effects.js" defer></script>
+<script src="./hero.js" defer></script>
 </head>
 <body>
-<div class="shell">
-<header><a class="wordmark" href="./index.html">AETHERIA<small>萌叶幻想物语 · 动态绘卷</small></a><span class="edition">SUMMER / VOL. 01</span></header>
-<section class="intro"><div><p class="eyebrow">SOMEWHERE BETWEEN THE WIND & YOU</p><h1>夏日慢车，<em>与你同席。</em></h1></div><p>窗外是流动的夏天，身旁是安静的陪伴。<br>轻轻倾斜手机，让这一刻有了深度。</p></section>
-<div class="stage-wrap" id="stage-wrap">
- <button class="exit-handle" id="exit-handle" aria-label="下拉或点击退出沉浸模式"><span></span><small>下拉返回</small></button>
- <div class="stage" id="stage" tabindex="0" role="img" aria-label="小叶子与白猫坐在夏日列车里的多层动态插画，可拖动或用方向键改变视角">
-  <canvas id="scene" aria-hidden="true"></canvas>
-  <div class="scene-label"><span>THE SUMMER EXPRESS</span><b>小叶子 · 风的来信</b></div>
-  <div class="scene-caption"><div><p>“想和你，一起慢慢看世界。”</p><small id="mood-label">01 / 晨光微风</small></div><div class="stamp">LEAF<br>MEMORY</div></div>
-  <div class="loading" id="loading"><strong>✧</strong><p id="load-text">正在打开夏天的车窗…</p><progress id="load-progress" max="8" value="0"></progress></div>
- </div>
- <button class="stage-open" id="immersive" aria-label="进入沉浸模式" aria-pressed="false">⛶</button>
-</div>
-<div class="controls"><div class="controls-left"><button class="btn primary" id="sensor" aria-pressed="false">✧ 开启陀螺仪</button><button class="btn" id="calibrate">◎ 视角归中</button><button class="btn" id="mood">☀ 切换光景</button><button class="btn" id="pause" aria-pressed="false">Ⅱ 暂停动态</button></div><span class="status" id="status" role="status">手指拖动，也能看见景深</span></div>
-<p class="instruction">倾斜看景深 · 摇一摇换光景 · 点击 ⛶ 沉浸欣赏，再从顶部手柄下拉返回</p>
-<section class="meta-strip"><div><b>01—08</b><span>八层夏日记忆<small>远山 · 车窗 · 少女 · 微光</small></span></div><div><b>2.5 D</b><span>随心而动的视差<small>轻轻倾斜，风景便有回应</small></span></div><div><b>∞</b><span>没有终点的车票<small>下一站，去喜欢的地方</small></span></div></section>
-<section class="story-grid"><article class="story-card"><p class="eyebrow">A MOMENT TO KEEP</p><h2>把夏天，留在这一帧。</h2><p>列车经过河岸，树影从她的发梢掠过。白猫踮起脚，望向窗外一闪而过的绿意。她没有问旅途还有多远，只是把身旁的位置留给了你。</p><p>有些风景不需要目的地，有些陪伴，也不必说出口。</p><span class="signature">With love, Xiaoyezi</span></article><aside class="ticket"><small>AETHERIA RAILWAY / ONE WAY</small><h2>一张写给你的夏日车票</h2><div class="route"><span>平凡日常</span><span aria-hidden="true">··· ✧ ···</span><span>温柔远方</span></div><p>乘客：每一个愿意停下来的人<br>座位：小叶子身旁 · 有效期：每个想念夏天的日子</p></aside></section>
-<details class="settings"><summary>画面与感应设置</summary><div class="settings-content"><div><label for="strength">景深幅度 <output id="strength-value">60%</output></label><input id="strength" type="range" min="0" max="100" value="60"><label for="key">黑底边缘柔化 <output id="key-value">24</output></label><input id="key" type="range" min="12" max="40" value="24"><div class="toggles"><label><input id="hair" type="checkbox" checked>发梢微动</label><label><input id="leaves" type="checkbox" checked>前景树叶</label><label><input id="shake" type="checkbox" checked>摇一摇换光景</label></div><p>感应首次接收到数据时自动校准。握姿改变后可点击“视角归中”。若边缘有黑线，可略微提高柔化值。</p></div><div><p>素材载入状态</p><ul id="files-list"></ul><button class="btn" id="retry" hidden>重新加载素材</button><p>图片保留上传时的原文件名，与本网页放在同一目录。</p></div></div></details>
-<footer>AETHERIA · LET EVERY LITTLE LEAF FIND ITS LIGHT</footer>
-</div><div id="toast" role="status" aria-live="polite"></div>
-<script>
-'use strict';
-/* 文件名按你的原始附件填写：无需改名、无需额外 JS/CSS、无需构建。 */
-const FILES = [
- {id:'L0', name:'天空远景', file:'ResizedImage_2026-09-19_00-24-23_2626[1].jpg', kind:'image'},
- {id:'L1', name:'窗外树影', file:'ResizedImage_2026-09-19_00-32-56_5264[1].jpg', kind:'trees'},
- {id:'L2', name:'车窗车厢', file:'IMG_20260919_003553.jpg', kind:'window'},
- {id:'L3', name:'白猫', file:'ResizedImage_2026-09-19_00-29-25_8440[1].jpg', kind:'cutout'},
- {id:'L4', name:'小叶子', file:'ResizedImage_2026-09-19_00-39-38_4648[3].jpg', kind:'cutout'},
- {id:'L5', name:'独立发梢', file:'ResizedImage_2026-09-19_00-39-38_5440[4].jpg', kind:'hair'},
- {id:'L6', name:'前景光斑', file:'ResizedImage_2026-09-19_00-39-37_4369[1].jpg', kind:'light'},
- {id:'L7', name:'近景树叶', file:'ResizedImage_2026-09-19_00-39-38_7391[2].jpg', kind:'cutout'}
-];
-const $ = id => document.getElementById(id);
-const canvas=$('scene'), ctx=canvas.getContext('2d',{alpha:false});
-const media=matchMedia('(prefers-reduced-motion: reduce)');
-const assets=new Map(), originals=new Map(), failures=new Map();
-let width=1,height=1,dpr=1,ready=false,loading=false,keyThreshold=24;
-let target={x:0,y:0}, view={x:0,y:0}, strength=.6, paused=media.matches;
-let raf=0,lastTime=0,clock=0,dirty=true,drag=null,sensorActive=false;
-let baseline=null,latest=null,orientationSeen=false,motionSeen=false,watchdog=0;
-let lastAcceleration=null,lastMotionTime=0,lastShake=-Infinity,sensorGeneration=0;
-let immersive=false,savedScroll=0,toastTimer=0,moodIndex=0;
-const MOODS=[{name:'晨光微风',filter:'none',light:.22,tint:null},{name:'午后金叶',filter:'saturate(1.06) sepia(.08)',light:.33,tint:'rgba(255,194,100,.055)'},{name:'薄荷晴空',filter:'saturate(.9)',light:.15,tint:'rgba(102,188,210,.05)'}];
-function notify(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3200);}
-function vibrate(pattern=[12]){try{navigator.vibrate?.(pattern);}catch{}}
-const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
-function workCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
-function sourceCanvas(img){const ratio=Math.min(1,1536/img.naturalWidth,1536/img.naturalHeight);const c=workCanvas(Math.round(img.naturalWidth*ratio),Math.round(img.naturalHeight*ratio));c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c;}
-/* 网页运行时生成遮罩，原 JPG 保持原样。近黑像素透明、软边渐变；深色鞋子保留。 */
-function removeBlack(source,protectShoes=false){const c=workCanvas(source.width,source.height),g=c.getContext('2d',{willReadFrequently:true});g.drawImage(source,0,0);const pixels=g.getImageData(0,0,c.width,c.height),p=pixels.data;
- for(let i=0;i<p.length;i+=4){const max=Math.max(p[i],p[i+1],p[i+2]);const low=protectShoes&&Math.floor(i/4/c.width)>c.height*.73;const ceiling=low?keyThreshold:keyThreshold*3.2;let a=clamp((max-8)/(ceiling-8),0,1);a=a*a*(3-2*a);p[i+3]=Math.round(p[i+3]*a);if(a>0&&a<1){p[i]=Math.min(255,p[i]/a);p[i+1]=Math.min(255,p[i+1]/a);p[i+2]=Math.min(255,p[i+2]/a);}}
- // 压缩 JPG 容易留下深色描边；仅在透明边缘附近收窄暗像素，不处理鞋子内部。
- const alpha=new Uint8Array(c.width*c.height);for(let j=0;j<alpha.length;j++)alpha[j]=p[j*4+3];
- for(let yy=2;yy<c.height-2;yy++){if(protectShoes&&yy>c.height*.73)continue;for(let xx=2;xx<c.width-2;xx++){const j=yy*c.width+xx,i=j*4;if(alpha[j]===0||Math.max(p[i],p[i+1],p[i+2])>145)continue;let edge=false;for(let dy=-2;dy<=2&&!edge;dy++)for(let dx=-2;dx<=2;dx++)if(alpha[j+dy*c.width+dx]<15){edge=true;break;}if(edge)p[i+3]=Math.round(p[i+3]*.24);}}
- g.putImageData(pixels,0,0);return c;}
-/* L2 窗口按实际素材的位置挖空，让 L0/L1 从车窗后独立移动。 */
-function windowCutout(source){const c=workCanvas(source.width,source.height),g=c.getContext('2d');g.drawImage(source,0,0);g.save();g.scale(c.width/1536,c.height/864);g.globalCompositeOperation='destination-out';g.beginPath();g.moveTo(122,3);g.lineTo(1112,165);g.quadraticCurveTo(1175,175,1182,239);g.lineTo(1184,478);g.quadraticCurveTo(1185,534,1129,539);g.lineTo(135,526);g.quadraticCurveTo(71,524,76,458);g.lineTo(89,65);g.quadraticCurveTo(88,12,122,3);g.closePath();g.fill();g.beginPath();g.moveTo(1387,221);g.lineTo(1536,249);g.lineTo(1536,480);g.lineTo(1373,492);g.quadraticCurveTo(1353,492,1355,467);g.lineTo(1363,250);g.quadraticCurveTo(1364,226,1387,221);g.closePath();g.fill();g.restore();return c;}
-function treeMask(source){const c=workCanvas(source.width,source.height),g=c.getContext('2d');g.drawImage(source,0,0);g.globalCompositeOperation='destination-in';const mask=g.createLinearGradient(0,0,c.width,0);mask.addColorStop(0,'rgba(0,0,0,.95)');mask.addColorStop(.28,'rgba(0,0,0,.75)');mask.addColorStop(.49,'rgba(0,0,0,0)');mask.addColorStop(.8,'rgba(0,0,0,0)');mask.addColorStop(1,'rgba(0,0,0,.8)');g.fillStyle=mask;g.fillRect(0,0,c.width,c.height);return c;}
-function hairMask(source){const c=removeBlack(source),g=c.getContext('2d');g.globalCompositeOperation='destination-in';const mask=g.createLinearGradient(0,0,c.width,0);mask.addColorStop(0,'transparent');mask.addColorStop(.42,'transparent');mask.addColorStop(.68,'black');mask.addColorStop(1,'black');g.fillStyle=mask;g.fillRect(0,0,c.width,c.height);return c;}
-function processAsset(def,img){const source=sourceCanvas(img);if(def.kind==='cutout')return removeBlack(source,def.id==='L4');if(def.kind==='hair')return hairMask(source);if(def.kind==='window')return windowCutout(source);if(def.kind==='trees')return treeMask(source);return source;}
-function renderFileList(){const list=$('files-list');list.replaceChildren();for(const def of FILES){const item=document.createElement('li');item.className=failures.has(def.id)?'bad':'';item.textContent=`${assets.has(def.id)?'✓':failures.has(def.id)?'×':'…'} ${def.id} ${def.name} — ${def.file}`;list.append(item);}$('retry').hidden=!failures.size;}
-function loadImage(file){return new Promise((resolve,reject)=>{const img=new Image();let timer=setTimeout(()=>{img.onload=img.onerror=null;reject(new Error('载入超时'));},18000);img.onload=()=>{clearTimeout(timer);resolve(img);};img.onerror=()=>{clearTimeout(timer);reject(new Error('图片未找到'));};img.src=new URL('./'+encodeURIComponent(file),location.href).href;});}
-async function loadAssets(){if(loading)return;loading=true;$('retry').disabled=true;failures.clear();$('loading').hidden=false;$('load-progress').value=0;renderFileList();let count=0;
- // 顺序处理，降低手机解码与遮罩时的内存峰值。
- for(const def of FILES){try{let img=originals.get(def.id);if(!img){img=await loadImage(def.file);originals.set(def.id,img);}assets.set(def.id,processAsset(def,img));}catch(error){failures.set(def.id,error.message);}count++;$('load-progress').value=count;$('load-text').textContent=`正在展开第 ${count} / 8 层夏天…`;renderFileList();await new Promise(resolve=>setTimeout(resolve,0));}
- loading=false;$('retry').disabled=false;ready=true;$('loading').hidden=true;resize();requestDraw();if(failures.size)notify(`${failures.size} 张图片未能加载，可在下方设置查看文件名并重试`);}
-function resize(){const r=$('stage').getBoundingClientRect();width=Math.max(1,r.width);height=Math.max(1,r.height);dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);dirty=true;requestDraw();}
-function drawImage(id,x,y,w,h,alpha=1,mode='source-over'){const image=assets.get(id);if(!image)return;ctx.save();ctx.globalAlpha=alpha;ctx.globalCompositeOperation=mode;ctx.drawImage(image,x,y,w,h);ctx.restore();}
-function cover(id,factor,dx,dy,alpha=1){const image=assets.get(id);if(!image)return;const ratio=Math.max(width/image.width,height/image.height)*factor,w=image.width*ratio,h=image.height*ratio;drawImage(id,(width-w)*.5+dx,(height-h)*.5+dy,w,h,alpha);}
-function paint(){if(!ctx)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#d4e7df';ctx.fillRect(0,0,width,height);const unit=Math.min(width,height),amount=strength*(paused?0:1),x=view.x*unit*.04*amount,y=view.y*unit*.028*amount,t=clock;
- // 远景移动最小；最近的树叶最大。各层均有额外边缘余量。
- cover('L0',1.17,x*.12,y*.12);
- cover('L1',1.17,x*.42+Math.sin(t*.12)*unit*.004*amount,y*.28);
- const frame=assets.get('L2');if(frame){const scale=Math.max(width/frame.width,height/frame.height)*1.10;drawImage('L2',(width-frame.width*scale)/2+x*.65,(height-frame.height*scale)/2+y*.42,frame.width*scale,frame.height*scale);}
- const portrait=height/width>1.02;
- // 窗台位置跟随 L2 的 cover 缩放，而不是屏幕固定百分比。
- const frScale=frame?Math.max(width/frame.width,height/frame.height)*1.10:1;
- const windowBottom=frame?(height-frame.height*frScale)/2+frScale*532:height*.48;
- const cat=assets.get('L3');if(cat){const cw=width*(portrait?.31:.19),ch=cw*cat.height/cat.width;drawImage('L3',width*(portrait?.64:.65)+x*.83,windowBottom-ch+unit*.012+y*.48,cw,ch);}
- const person=assets.get('L4');if(person){let ph=Math.min(height*.94,width*(portrait?1.0:.91)),pw=ph*person.width/person.height;let px=width*(portrait?.035:.135),py=height-ph-height*.01;px+=x;py+=y*.70;
- // 独立 L5 与 L4 非同画布生成：只显示后侧发梢，不把整个头发覆盖到脸上。
- if($('hair').checked&&assets.has('L5')){const hair=assets.get('L5');ctx.save();ctx.translate(px+pw*.28,py+ph*.49);ctx.scale(-1,1);ctx.rotate(Math.sin(t*.8)*.012*amount);drawImage('L5',-pw*.25,-ph*.14,pw*.66,pw*.66*hair.height/hair.width,.85);ctx.restore();}
- drawImage('L4',px,py,pw,ph);
- }
- if(assets.has('L6')){ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=MOODS[moodIndex].light;const light=assets.get('L6'),lh=height*1.12,lw=lh*light.width/light.height;ctx.drawImage(light,(width-lw)*.5+x*1.25,(-height*.06)+y*1.1,lw,lh);ctx.restore();}
- if($('leaves').checked&&assets.has('L7')){const leaves=assets.get('L7');let lw=width*(portrait?.86:.66),lh=lw*leaves.height/leaves.width;drawImage('L7',width-lw+width*.06+x*1.75,-lh*.24+y*1.4,lw,lh,.94);}
- // 稀疏微光，不覆盖人物五官。
- if(!paused){ctx.save();for(let i=0;i<17;i++){const px=((i*.173+Math.sin(t*.2+i)*.016)%1)*width,py=(1-((i*.127+t*.011)%1))*height;ctx.fillStyle=`rgba(255,253,222,${.18+(Math.sin(t+i)+1)*.12})`;ctx.beginPath();ctx.arc(px,py,1+(i%3)*.45,0,Math.PI*2);ctx.fill();}ctx.restore();}
- if(MOODS[moodIndex].tint){ctx.fillStyle=MOODS[moodIndex].tint;ctx.fillRect(0,0,width,height);}
- const vignette=ctx.createLinearGradient(0,height*.73,0,height);vignette.addColorStop(0,'transparent');vignette.addColorStop(1,'rgba(18,44,32,.28)');ctx.fillStyle=vignette;ctx.fillRect(0,0,width,height);
- canvas.style.transform=paused?'none':`perspective(1200px) rotateX(${-view.y*1.0*strength}deg) rotateY(${view.x*1.25*strength}deg) scale(1.025)`;
- dirty=false;}
-function frame(time){raf=0;if(document.hidden||!ready)return;const elapsed=lastTime?Math.min((time-lastTime)/1000,.08):.033;if(time-lastTime>=32||dirty){lastTime=time;if(!paused)clock+=elapsed;const blend=1-Math.exp(-elapsed*9);view.x+=(target.x-view.x)*blend;view.y+=(target.y-view.y)*blend;paint();}if(!paused)raf=requestAnimationFrame(frame);}
-function requestDraw(){dirty=true;if(!raf&&!document.hidden&&ready)raf=requestAnimationFrame(frame);}
-function setStatus(text,live=false){$('status').textContent=text;$('status').classList.toggle('live',live);}
-function resetView(show=true){baseline=latest?{...latest}:null;lastAcceleration=null;target={x:0,y:0};view={x:0,y:0};requestDraw();if(show)notify('已把当前握姿设为正面视角');}
-function orientation(e){if(!sensorActive||document.hidden||!Number.isFinite(e.beta)||!Number.isFinite(e.gamma))return;latest={beta:e.beta,gamma:e.gamma};if(!baseline)baseline={...latest};if(!orientationSeen){orientationSeen=true;setStatus('感应已连接 · 倾斜手机看景深',true);$('sensor').textContent='✧ 感应已连接';}if(paused||drag)return;const gx=clamp((latest.gamma-baseline.gamma)/22,-1,1),gy=clamp((latest.beta-baseline.beta)/22,-1,1);const angle=((screen.orientation?.angle??window.orientation??0)*Math.PI)/180;target.x=clamp(gx*Math.cos(angle)+gy*Math.sin(angle),-1,1);target.y=clamp(gy*Math.cos(angle)-gx*Math.sin(angle),-1,1);requestDraw();}
-function motion(e){if(!sensorActive||document.hidden||paused||!$('shake').checked)return;const a=e.accelerationIncludingGravity;if(!a||![a.x,a.y,a.z].every(Number.isFinite))return;motionSeen=true;const now=performance.now();if(now-lastMotionTime<100)return;lastMotionTime=now;const next={x:a.x,y:a.y,z:a.z};if(lastAcceleration){const delta=Math.abs(next.x-lastAcceleration.x)+Math.abs(next.y-lastAcceleration.y)+Math.abs(next.z-lastAcceleration.z);if(delta>30&&now-lastShake>2200){lastShake=now;cycleMood();vibrate([15,35,15]);}}lastAcceleration=next;}
-function disableSensors(){sensorActive=false;sensorGeneration++;clearTimeout(watchdog);window.removeEventListener('deviceorientation',orientation);window.removeEventListener('devicemotion',motion);baseline=null;latest=null;lastAcceleration=null;$('sensor').textContent='✧ 开启陀螺仪';$('sensor').setAttribute('aria-pressed','false');setStatus('手指拖动，也能看见景深');resetView(false);}
-async function enableSensors(){if(sensorActive){disableSensors();return;}if(!isSecureContext){notify('请通过 GitHub Pages 的 HTTPS 网址打开，再开启感应');return;}
- const button=$('sensor'),generation=++sensorGeneration;button.disabled=true;
- // 必须在本次用户点击中同时请求 orientation 和 motion 权限。
- const ask=Type=>{if(!Type)return Promise.resolve(false);try{return typeof Type.requestPermission==='function'?Type.requestPermission().then(result=>result==='granted').catch(()=>false):Promise.resolve(true);}catch{return Promise.resolve(false);}};
- const requests=[ask(window.DeviceOrientationEvent),ask(window.DeviceMotionEvent)];
- const [canOrient,canMove]=await Promise.all(requests);button.disabled=false;if(generation!==sensorGeneration)return;
- if(!canOrient&&!canMove){notify('未获得感应权限或浏览器不支持；仍可用手指拖动画面');setStatus('感应不可用 · 拖动模式');return;}
- sensorActive=true;orientationSeen=false;motionSeen=false;lastAcceleration=null;baseline=null;latest=null;lastMotionTime=0;
- if(canOrient)window.addEventListener('deviceorientation',orientation,{passive:true});if(canMove)window.addEventListener('devicemotion',motion,{passive:true});button.textContent='✧ 等待感应';button.setAttribute('aria-pressed','true');setStatus('请轻轻倾斜手机，正在等待数据');notify(paused?'感应已开启；点击“继续动态”后画面会跟随':'请保持舒适握姿，轻轻倾斜手机');
- watchdog=setTimeout(()=>{if(sensorActive&&!orientationSeen){setStatus(motionSeen?'已连接摇动 · 暂无方向数据':'未收到感应数据 · 可继续拖动');notify('暂未收到方向数据，请检查权限或使用手机系统浏览器');}},5000);
-}
-function cycleMood(){moodIndex=(moodIndex+1)%MOODS.length;canvas.style.filter=MOODS[moodIndex].filter;$('mood-label').textContent=`0${moodIndex+1} / ${MOODS[moodIndex].name}`;requestDraw();notify(MOODS[moodIndex].name);}
-function setPaused(value){paused=value;document.body.classList.toggle('static',paused);$('pause').textContent=paused?'▷ 继续动态':'Ⅱ 暂停动态';$('pause').setAttribute('aria-pressed',String(paused));lastAcceleration=null;target={x:0,y:0};view={x:0,y:0};requestDraw();}
-function toggleImmersive(force){const next=typeof force==='boolean'?force:!immersive;if(next===immersive)return;immersive=next;if(next)savedScroll=scrollY;document.body.classList.toggle('immersive',next);$('immersive').setAttribute('aria-pressed',String(next));$('immersive').setAttribute('aria-label',next?'退出沉浸模式':'进入沉浸模式');$('immersive').textContent=next?'×':'⛶';$('stage').style.removeProperty('transform');if(!next){window.scrollTo(0,savedScroll);$('immersive').focus({preventScroll:true});}else $('exit-handle').focus({preventScroll:true});requestAnimationFrame(resize);vibrate();}
-$('sensor').addEventListener('click',enableSensors);$('calibrate').addEventListener('click',()=>resetView());$('mood').addEventListener('click',cycleMood);$('pause').addEventListener('click',()=>setPaused(!paused));$('immersive').addEventListener('click',()=>toggleImmersive());$('retry').addEventListener('click',loadAssets);
-$('strength').addEventListener('input',e=>{strength=Number(e.target.value)/100;$('strength-value').value=e.target.value+'%';requestDraw();});
-$('key').addEventListener('input',e=>$('key-value').value=e.target.value);
-$('key').addEventListener('change',async e=>{keyThreshold=Number(e.target.value);for(const def of FILES){if(['cutout','hair'].includes(def.kind)&&originals.has(def.id)){assets.set(def.id,processAsset(def,originals.get(def.id)));await new Promise(resolve=>setTimeout(resolve,0));}}requestDraw();});
-for(const id of ['hair','leaves','shake'])$(id).addEventListener('change',()=>{lastAcceleration=null;requestDraw();});
-const pointers=new Set();
-$('stage').addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;pointers.add(e.pointerId);if(pointers.size>1){drag=null;return;}drag={id:e.pointerId,x:e.clientX,y:e.clientY,ox:target.x,oy:target.y};try{$('stage').setPointerCapture(e.pointerId);}catch{}});
-$('stage').addEventListener('pointermove',e=>{if(paused)return;if(drag&&drag.id===e.pointerId){target.x=clamp(drag.ox+(e.clientX-drag.x)/(width*.28),-1,1);target.y=clamp(drag.oy+(e.clientY-drag.y)/(height*.28),-1,1);requestDraw();}else if(e.pointerType==='mouse'&&!sensorActive){const r=$('stage').getBoundingClientRect();target.x=clamp((e.clientX-r.left)/r.width*2-1,-1,1);target.y=clamp((e.clientY-r.top)/r.height*2-1,-1,1);requestDraw();}});
-function endPointer(e){pointers.delete(e.pointerId);if(drag?.id===e.pointerId)drag=null;}
-$('stage').addEventListener('pointerup',endPointer);$('stage').addEventListener('pointercancel',endPointer);$('stage').addEventListener('pointerleave',()=>{if(!drag&&!sensorActive){target={x:0,y:0};requestDraw();}});
-$('stage').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)||paused)return;e.preventDefault();if(e.key==='ArrowLeft')target.x=clamp(target.x-.2,-1,1);if(e.key==='ArrowRight')target.x=clamp(target.x+.2,-1,1);if(e.key==='ArrowUp')target.y=clamp(target.y-.2,-1,1);if(e.key==='ArrowDown')target.y=clamp(target.y+.2,-1,1);requestDraw();});
-window.addEventListener('keydown',e=>{if(e.key==='Escape'&&immersive)toggleImmersive(false);});
-// 下拉退出只在沉浸模式的独立顶部手柄触发，不截获图片纵向浏览。
-let pull=null,suppressHandleClick=false;
-$('exit-handle').addEventListener('pointerdown',e=>{if(pull){pull=null;suppressHandleClick=true;$('stage').style.removeProperty('transform');return;}suppressHandleClick=false;pull={id:e.pointerId,x:e.clientX,y:e.clientY,dy:0};$('exit-handle').setPointerCapture(e.pointerId);});
-$('exit-handle').addEventListener('pointermove',e=>{if(!pull||e.pointerId!==pull.id)return;const dx=e.clientX-pull.x;pull.dy=e.clientY-pull.y;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(pull.dy)){pull=null;suppressHandleClick=true;$('stage').style.removeProperty('transform');return;}if(pull.dy>0)$('stage').style.transform=`translateY(${Math.min(90,pull.dy*.3)}px)`;});
-$('exit-handle').addEventListener('pointerup',e=>{if(!pull||pull.id!==e.pointerId)return;const close=pull.dy>85;suppressHandleClick=Math.abs(pull.dy)>10;pull=null;$('stage').style.removeProperty('transform');if(close)toggleImmersive(false);});
-$('exit-handle').addEventListener('pointercancel',()=>{pull=null;suppressHandleClick=true;$('stage').style.removeProperty('transform');});
-$('exit-handle').addEventListener('click',()=>{if(suppressHandleClick){suppressHandleClick=false;return;}toggleImmersive(false);});
-window.addEventListener('resize',resize,{passive:true});screen.orientation?.addEventListener('change',()=>{baseline=null;latest=null;resetView(false);});
-document.addEventListener('visibilitychange',()=>{lastTime=0;lastAcceleration=null;baseline=null;latest=null;if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=0;}else requestDraw();});
-media.addEventListener('change',e=>setPaused(e.matches));
-setPaused(paused);renderFileList();if(ctx)loadAssets();else{$('load-text').textContent='浏览器不支持 Canvas，请使用新版系统浏览器打开。';}
-</script>
+<canvas id="stardust" aria-hidden="true"></canvas>
+<div class="aurora" aria-hidden="true"></div>
+<header class="topbar"><a class="brand" href="#home">✧ AETHERIA<small>萌叶幻想物语</small></a><div class="top-controls"><button id="sensors" class="quiet" aria-pressed="false">✧ 开启感应</button><button id="sound" class="quiet" aria-pressed="false">音效：关</button></div></header>
+<main id="app" tabindex="-1"></main>
+<nav class="navigation" aria-label="主导航"><a href="#home">⌂<span>首页</span></a><a href="#gallery">❀<span>图鉴</span></a><a href="#world">✧<span>世界</span></a><a href="#favorites">♡<span>收藏</span></a></nav>
+<div id="notice" role="status" aria-live="polite"></div>
+<noscript>请在浏览器中开启 JavaScript，以浏览角色图鉴。</noscript>
 </body>
 </html>
