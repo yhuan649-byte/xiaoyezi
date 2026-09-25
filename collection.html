@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f7f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080d0b" media="(prefers-color-scheme: dark)">
+<title>镭射收藏室 | AETHERIA 萌叶幻想物语集</title>
+<meta name="description" content="AETHERIA 镭射收藏室 —— 拖动或倾斜设备把玩全息镭射卡，切换五种卡膜预设与光强度。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C24 9 28 15 16 29 4 15 8 9 16 3Z' fill='%2348725e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<noscript><style>.reveal{opacity:1;translate:none}.preloader{display:none}</style></noscript>
+</head>
+
+<body data-page="collection">
+
+<div class="preloader" id="preloader" role="status" aria-live="polite">
+  <div class="pre-inner">
+    <div class="pre-mark">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--accent-2)"/>
+        </linearGradient></defs>
+        <path class="leaf-path" d="M32 6 C 46 18, 54 30, 32 58 C 10 30, 18 18, 32 6 Z" fill="none" stroke="url(#leafGrad)" stroke-width="1.6" stroke-linecap="round"/>
+        <path class="leaf-vein" d="M32 12 L32 54 M32 26 L42 20 M32 36 L40 32 M32 26 L22 20 M32 36 L24 32" fill="none" stroke="url(#leafGrad)" stroke-width="1.1" stroke-linecap="round" opacity=".65"/>
+      </svg>
+    </div>
+    <div class="pre-word">HOLO ATELIER</div>
+    <div class="pre-bar"><span id="preBar"></span></div>
+    <div class="pre-pct"><span id="prePct">0</span>% · 正在校准卡膜</div>
+  </div>
+</div>
+
+<div class="ambient" aria-hidden="true">
+  <div class="aurora aurora-a" data-depth="24"></div>
+  <div class="aurora aurora-b" data-depth="40"></div>
+  <div class="aurora aurora-c" data-depth="60"></div>
+  <div class="grain"></div>
+  <canvas id="stardust"></canvas>
+</div>
+
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span id="cursorLabel"></span></div>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="nav-brand" href="index.html" aria-label="返回首页">
+    <svg class="brand-leaf" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 3 C 24 9, 28 15, 16 29 C 4 15, 8 9, 16 3 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-text">AETHERIA</span>
+  </a>
+  <nav class="nav-links" aria-label="主导航">
+    <a href="index.html"      class="nav-link" data-nav="home">首页<span>Home</span></a>
+    <a href="gallery.html"    class="nav-link" data-nav="gallery">绘卷<span>Gallery</span></a>
+    <a href="chronicle.html"  class="nav-link" data-nav="chronicle">编年<span>Chronicle</span></a>
+    <a href="archive.html"    class="nav-link" data-nav="archive">档案<span>Archive</span></a>
+    <a href="collection.html" class="nav-link" data-nav="collection">收藏<span>Holo</span></a>
+  </nav>
+  <div class="nav-tools">
+    <button class="icon-btn" id="soundToggle" aria-pressed="false" aria-label="开启环境音" title="环境音 (S)">
+      <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" aria-label="切换深色模式" title="主题 (T)">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></g></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.6 8.6 0 1 0 10.2 10.2Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="section page-section">
+
+    <div class="section-head reveal">
+      <div class="sec-index mono">05</div>
+      <div>
+        <h2 class="sec-title">镭射收藏室</h2>
+        <p class="sec-desc">
+          把卡拿在手里转一转。拖动卡面、或直接倾斜手机 —— 彩虹膜、扫光带与高光斑会跟着入射角一起移动。
+        </p>
+      </div>
+    </div>
+
+    <!-- ══ 玩赏台 ══ -->
+    <div class="lab">
+      <div class="lab-stage reveal" id="labStage">
+        <div class="lab-card holo" id="labCard">
+          <div class="card-foil"></div>
+          <div class="card-sheen"></div>
+          <div class="card-glare"></div>
+          <img class="lab-img" id="labImg" alt="镭射卡面立绘" draggable="false">
+          <div class="lab-card-foot">
+            <div class="lab-card-zh" id="labNameZh">幻叶</div>
+            <div class="lab-card-en mono" id="labNameEn">HAANYE</div>
+          </div>
+          <div class="lab-card-no mono" id="labNo">01 / 04</div>
+        </div>
+        <div class="lab-hint mono" id="labHint">拖动卡面旋转 · 手机上倾斜设备</div>
+      </div>
+
+      <!-- ══ 控制台 ══ -->
+      <aside class="lab-panel reveal">
+        <div class="lab-block">
+          <div class="lab-label mono">FILM · 卡膜预设</div>
+          <div class="lab-films" id="labFilms"></div>
+          <p class="lab-note" id="labFilmNote"></p>
+        </div>
+
+        <div class="lab-block">
+          <div class="lab-label mono">BOOST · 光强度 <span id="labBoostVal">1.0×</span></div>
+          <input class="lab-range" id="labBoost" type="range" min="0.4" max="2" step="0.1" value="1"
+                 aria-label="镭射光强度">
+        </div>
+
+        <div class="lab-block">
+          <div class="lab-label mono">MOTION · 动态</div>
+          <div class="lab-toggles">
+            <button class="lab-toggle" id="labAuto" aria-pressed="false">自动摇曳</button>
+            <button class="lab-toggle" id="labGyro" aria-pressed="true">重力跟随</button>
+            <button class="lab-toggle" id="labReset">复位卡面</button>
+          </div>
+        </div>
+
+        <div class="lab-block">
+          <div class="lab-label mono">SUBJECT · 选择角色</div>
+          <div class="lab-picker" id="labPicker"></div>
+        </div>
+
+        <div class="lab-block">
+          <div class="lab-label mono">ANGLE · 当前姿态</div>
+          <div class="lab-readout mono">
+            <span id="labRx">X 0.0°</span><span id="labRy">Y 0.0°</span><span id="labAng">FOIL 135°</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ══ 原理说明 ══ -->
+    <div class="lab-detail reveal">
+      <h3 class="sub-title">这层光是怎么来的</h3>
+      <div class="lab-grid">
+        <div class="lab-note-card">
+          <div class="lab-note-key mono">01 · 彩虹膜</div>
+          <p>五段光谱叠一层细密光栅条纹，整体沿入射角旋转。浅色主题下用 <code>multiply</code> 染色，深色主题下改用 <code>color-dodge</code> 发光 —— 这是手机上能不能看见镭射的关键。</p>
+        </div>
+        <div class="lab-note-card">
+          <div class="lab-note-key mono">02 · 扫光带</div>
+          <p>一条斜向白光，随倾角在卡面上平移。它比彩虹更亮、移动更快，是镭射卡最直观的"晃一下就闪"的部分。</p>
+        </div>
+        <div class="lab-note-card">
+          <div class="lab-note-key mono">03 · 高光斑</div>
+          <p>跟随手指或重心的柔光圆斑，模拟点光源在覆膜上的镜面反射，让卡面有厚度。</p>
+        </div>
+        <div class="lab-note-card">
+          <div class="lab-note-key mono">04 · 虹彩描边</div>
+          <p>用 <code>mask-composite</code> 把彩虹渐变裁成 1px 边框，光线越强，卡边越亮。</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">AETHERIA</span>
+      <p>萌叶幻想物语集 · 虚拟人格艺术绘卷</p>
+    </div>
+    <nav class="footer-links">
+      <a href="index.html">首页</a><a href="gallery.html">绘卷</a>
+      <a href="chronicle.html">编年</a><a href="archive.html">档案</a>
+      <a href="collection.html">收藏</a>
+    </nav>
+    <div class="footer-meta mono"><span>huanye-xiaoyezi</span><span>·</span><span id="yearSpan">2026</span></div>
+    <button class="to-top" id="toTop" aria-label="返回顶部">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M5.5 12.5 12 6l6.5 6.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

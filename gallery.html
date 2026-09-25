@@ -5,14 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f4f7f4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#080d0b" media="(prefers-color-scheme: dark)">
-<title>AETHERIA · 萌叶幻想物语集 | 虚拟人格艺术绘卷</title>
-<meta name="description" content="AETHERIA 萌叶幻想物语集 —— 幻叶、小叶子、黑白双生与呆呆的虚拟人格艺术绘卷。收录立绘全景、性格档案与物语叙事。">
-<meta property="og:title" content="AETHERIA · 萌叶幻想物语集">
-<meta property="og:description" content="四片叶子落在同一阵风里 —— 虚拟人格艺术绘卷">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://picui.ogmua.cn/s1/2026/09/13/6aa6a9fba2fc6.webp">
+<title>绘卷 · 人格群像 | AETHERIA 萌叶幻想物语集</title>
+<meta name="description" content="AETHERIA 绘卷展厅 —— 幻叶、小叶子、黑白双生与呆呆的全息镭射绘卷，支持重力感应与沉浸式全屏展厅。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C24 9 28 15 16 29 4 15 8 9 16 3Z' fill='%2348725e'/%3E%3C/svg%3E">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,9 +15,8 @@
 <noscript><style>.reveal{opacity:1;translate:none}.preloader{display:none}</style></noscript>
 </head>
 
-<body data-page="home">
+<body data-page="gallery">
 
-<!-- ══════════ 启动幕 ══════════ -->
 <div class="preloader" id="preloader" role="status" aria-live="polite">
   <div class="pre-inner">
     <div class="pre-mark">
@@ -34,13 +28,12 @@
         <path class="leaf-vein" d="M32 12 L32 54 M32 26 L42 20 M32 36 L40 32 M32 26 L22 20 M32 36 L24 32" fill="none" stroke="url(#leafGrad)" stroke-width="1.1" stroke-linecap="round" opacity=".65"/>
       </svg>
     </div>
-    <div class="pre-word">AETHERIA</div>
+    <div class="pre-word">GALLERY</div>
     <div class="pre-bar"><span id="preBar"></span></div>
-    <div class="pre-pct"><span id="prePct">0</span>% · 正在唤醒绘卷</div>
+    <div class="pre-pct"><span id="prePct">0</span>% · 正在展开绘卷</div>
   </div>
 </div>
 
-<!-- ══════════ 背景环境层 ══════════ -->
 <div class="ambient" aria-hidden="true">
   <div class="aurora aurora-a" data-depth="24"></div>
   <div class="aurora aurora-b" data-depth="40"></div>
@@ -53,7 +46,6 @@
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"><span id="cursorLabel"></span></div>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<!-- ══════════ 导航（全站共用） ══════════ -->
 <header class="nav" id="nav">
   <a class="nav-brand" href="index.html" aria-label="返回首页">
     <svg class="brand-leaf" viewBox="0 0 32 32" aria-hidden="true">
@@ -61,7 +53,6 @@
     </svg>
     <span class="brand-text">AETHERIA</span>
   </a>
-
   <nav class="nav-links" aria-label="主导航">
     <a href="index.html"     class="nav-link" data-nav="home">首页<span>Home</span></a>
     <a href="gallery.html"   class="nav-link" data-nav="gallery">绘卷<span>Gallery</span></a>
@@ -69,7 +60,6 @@
     <a href="archive.html"   class="nav-link" data-nav="archive">档案<span>Archive</span></a>
     <a href="collection.html" class="nav-link" data-nav="collection">收藏<span>Holo</span></a>
   </nav>
-
   <div class="nav-tools">
     <button class="icon-btn" id="soundToggle" aria-pressed="false" aria-label="开启环境音" title="环境音 (S)">
       <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
@@ -83,102 +73,18 @@
 </header>
 
 <main id="top">
-
-  <!-- ══════════ HERO ══════════ -->
-  <section class="hero">
-    <div class="hero-glow" data-depth="60" aria-hidden="true"></div>
-    <div class="hero-copy">
-      <div class="eyebrow reveal" data-delay="0">
-        <span class="eyebrow-dot"></span>
-        Virtual Persona · Fine Art Showcase
-      </div>
-      <h1 class="hero-title reveal" data-delay="1">
-        <span class="title-line title-en">AETHERIA</span>
-        <span class="title-line title-zh">萌叶幻想物语</span>
-      </h1>
-      <p class="hero-sub reveal" data-delay="2">
-        四片叶子落在同一阵风里 —— 她们是晨雾、是碧水、是黑白相依的呼吸，<br>
-        也是那个总在发呆、却依然想去看世界的孩子。
-      </p>
-      <div class="hero-actions reveal" data-delay="3">
-        <a href="gallery.html" class="btn btn-primary">
-          <span>展开绘卷</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5.5 18.5 12 12 18.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <button class="btn btn-ghost" id="surpriseBtn">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
-          <span>随机相遇</span>
-        </button>
-      </div>
-      <dl class="hero-stats reveal" data-delay="4">
-        <div class="stat"><dt>人格</dt><dd><span class="num" data-count="4">0</span></dd></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><dt>物语章节</dt><dd><span class="num" data-count="12">0</span></dd></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><dt>绘卷编号</dt><dd class="mono">AE—04</dd></div>
-      </dl>
-    </div>
-    <div class="scroll-cue" aria-hidden="true">
-      <span class="cue-text">向下滚动</span>
-      <span class="cue-line"></span>
-    </div>
-  </section>
-
-  <!-- ══════════ 精选绘卷 ══════════ -->
-  <section class="section" id="featured">
+  <section class="section page-section">
     <div class="section-head reveal">
       <div class="sec-index mono">01</div>
       <div>
-        <h2 class="sec-title">精选 · 四片叶子</h2>
-        <p class="sec-desc">轻触卡片进入该角色的独立绘卷页；手机上倾斜设备，卡面镭射会随光线流转。</p>
+        <h2 class="sec-title">绘卷 · 人格群像</h2>
+        <p class="sec-desc">轻触卡片进入沉浸式展厅；展厅内左右滑动切换，向下拉动返回。手机上倾斜设备，卡面镭射会随光线流转。</p>
       </div>
     </div>
+
+    <div class="filters reveal" role="tablist" aria-label="人格筛选" id="filters"></div>
     <div class="gallery-grid" id="galleryGrid"></div>
-    <div class="section-more reveal">
-      <a href="gallery.html" class="btn btn-ghost">
-        <span>进入完整绘卷展厅</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5.5 18.5 12 12 18.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
   </section>
-
-  <!-- ══════════ 全站入口 ══════════ -->
-  <section class="section" id="portals">
-    <div class="section-head reveal">
-      <div class="sec-index mono">02</div>
-      <div>
-        <h2 class="sec-title">入口 · 走进这个世界</h2>
-        <p class="sec-desc">绘卷、编年与档案，三种不同的阅读方式。</p>
-      </div>
-    </div>
-    <div class="portal-grid">
-      <a class="portal-card reveal" href="gallery.html">
-        <div class="portal-key mono">GALLERY</div>
-        <h3>绘卷展厅</h3>
-        <p>四张全息镭射卡、性格筛选与沉浸式全屏展厅，支持左右滑动与下拉返回。</p>
-        <span class="portal-go">进入 →</span>
-      </a>
-      <a class="portal-card reveal" href="chronicle.html">
-        <div class="portal-key mono">CHRONICLE</div>
-        <h3>世界编年</h3>
-        <p>以落叶计时的纪年表，记录每一片叶子落下时发生的事。</p>
-        <span class="portal-go">进入 →</span>
-      </a>
-      <a class="portal-card reveal" href="archive.html">
-        <div class="portal-key mono">ARCHIVE</div>
-        <h3>观察档案</h3>
-        <p>世界观设定、绘卷介质、共鸣频率与手势交互的完整说明。</p>
-        <span class="portal-go">进入 →</span>
-      </a>
-      <a class="portal-card reveal" href="collection.html">
-        <div class="portal-key mono">HOLO</div>
-        <h3>镭射收藏室</h3>
-        <p>把卡拿在手里转一转：五种卡膜、光强度调节、自动摇曳与重力跟随。</p>
-        <span class="portal-go">进入 →</span>
-      </a>
-    </div>
-  </section>
-
 </main>
 
 <footer class="footer">
@@ -197,6 +103,89 @@
     </button>
   </div>
 </footer>
+
+<!-- ══════════ 沉浸式展厅 ══════════ -->
+<section class="pavilion" id="pavilion" role="dialog" aria-modal="true" aria-label="角色展厅" aria-hidden="true">
+  <div class="pav-topbar" id="pavTopbar">
+    <button class="pav-close" id="pavClose" aria-label="关闭展厅">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="pav-drag" id="pavDrag">
+      <span class="drag-indicator" id="dragIndicator"></span>
+      <span class="drag-hint" id="dragHint">向下拉动返回画廊</span>
+    </div>
+    <div class="pav-counter mono" id="pavCounter">01 / 04</div>
+  </div>
+
+  <div class="pav-body" id="pavBody">
+    <div class="pav-shift" id="pavShift">
+      <figure class="pav-visual" id="pavVisual">
+        <div class="pav-frame">
+          <img class="pav-img" id="pavImg" alt="角色立绘全景" draggable="false">
+          <div class="pav-img-shade" aria-hidden="true"></div>
+          <button class="pav-zoom" id="pavZoom" aria-label="放大查看">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <figcaption class="pav-caption mono" id="pavCaption"></figcaption>
+      </figure>
+
+      <div class="pav-info">
+        <div class="pav-head">
+          <div class="pav-name-zh" id="pavNameZh"></div>
+          <div class="pav-name-en" id="pavNameEn"></div>
+        </div>
+
+        <div class="resonance">
+          <div class="reso-head">
+            <span class="reso-label mono">RESONANCE · 共鸣波形</span>
+            <button class="reso-btn" id="resoBtn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor"/></svg>
+              <span>聆听</span>
+            </button>
+          </div>
+          <canvas id="waveCanvas" width="600" height="72" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-win"><div class="meta-title mono">PERSONALITY</div><div class="meta-val" id="metaPersonality"></div></div>
+          <div class="meta-win"><div class="meta-title mono">BIRTH MARK</div><div class="meta-val" id="metaBirthday"></div></div>
+          <div class="meta-win"><div class="meta-title mono">ELEMENT</div><div class="meta-val" id="metaElement"></div></div>
+          <div class="meta-win"><div class="meta-title mono">RESONANCE</div><div class="meta-val mono" id="metaFreq"></div></div>
+        </div>
+
+        <div class="story">
+          <div class="story-mark" aria-hidden="true">“</div>
+          <p class="story-quote" id="pavQuote"></p>
+          <p class="story-text" id="pavStory"></p>
+        </div>
+
+        <div class="pav-nav">
+          <button class="pav-arrow" id="pavPrev" aria-label="上一位角色">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8.5 12 14 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>上一位</span>
+          </button>
+          <div class="pav-dots" id="pavDots" role="tablist" aria-label="角色切换"></div>
+          <button class="pav-arrow" id="pavNext" aria-label="下一位角色">
+            <span>下一位</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6 15.5 12 10 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <a class="pav-deeplink" id="pavDeep" href="character.html">查看完整角色页 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 图片放大查看 ══════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="立绘放大查看" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="关闭放大">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <img id="lbImg" alt="立绘放大">
+  <div class="lb-hint mono">滚轮 / 双指缩放 · 拖拽平移 · 点击空白处关闭</div>
+</div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>

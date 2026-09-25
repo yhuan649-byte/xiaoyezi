@@ -11,92 +11,26 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  /* ─────────── 数据 ─────────── */
-  const CHARACTERS = [
-    {
-      id: 'haanye',
-      nameZh: '幻叶', nameEn: 'Haanye',
-      tag: 'Green Leaf Dream',
-      personality: '活泼 · 开朗 · 温柔',
-      tags: ['活泼', '温柔'],
-      birthday: '11月23日 · 初春之叶',
-      element: '风 · 嫩芽',
-      chapter: '第一叶',
-      quote: '像风一样，把快乐吹进每一片叶子里。',
-      story: '幻叶诞生于初春嫩芽萌发的瞬间，身着荧光嫩绿的潮流外套。她热爱踏着晨曦露水漫游在各地森林，把收集落叶作为独一无二的宝物。那双清澈的眼睛闪烁着自然的生机，把风的温度带给旅途中的每个人。',
-      image: 'https://picui.ogmua.cn/s1/2026/09/13/6aa6a9fba2fc6.webp',
-      freq: 523.25,
-      hue: ['#a8d5b5', '#5c9c78']
-    },
-    {
-      id: 'xiaoyezi',
-      nameZh: '小叶子', nameEn: 'Xiaoyezi',
-      tag: 'Pure Natural',
-      personality: '温柔 · 腼腆 · 细腻',
-      tags: ['温柔'],
-      birthday: '10月12日 · 碧水微澜',
-      element: '水 · 微光',
-      chapter: '第二叶',
-      quote: '一片叶子，一份温柔。很高兴认识你~',
-      story: '小叶子宛如春日微风拂落的柔光。坐在石栏旁的她总是安静翻阅着画册，青翠长发旁缀着两片嫩芽发饰。她虽然不善张扬言语，却能用最纯净的目光与无声陪伴，治愈每一个平凡疲惫的日常。',
-      image: 'https://picui.ogmua.cn/s1/2026/09/13/6aa6acb082068.webp',
-      freq: 587.33,
-      hue: ['#bfe0d0', '#4f8f8b']
-    },
-    {
-      id: 'twins',
-      nameZh: '小白 & 小黑', nameEn: 'Little Black & White',
-      tag: 'Two Souls, One World',
-      personality: '小白(软萌傲娇) · 小黑(活泼粘人)',
-      tags: ['双生', '活泼'],
-      birthday: '双生同栖 · 永恒晨曦',
-      element: '光 · 影',
-      chapter: '第三叶',
-      quote: '有你在的地方，就是最温暖的角落 ♡',
-      story: '依偎在暖阳里的猫耳双生少女。戴着十字发夹的白猫小白略带害羞，黑猫小黑则总是开心地紧紧环抱对方。黑白相依，是彼此无可替代的纯洁羁绊，在安静的角落构筑起最坚实的避风港。',
-      image: 'https://picui.ogmua.cn/s1/2026/09/13/6aa6ae2bbc8c3.webp',
-      freq: 659.25,
-      hue: ['#e8e4dc', '#5a5f66']
-    },
-    {
-      id: 'daidai',
-      nameZh: '呆呆', nameEn: 'Daidai',
-      tag: 'Big Dreamer',
-      personality: '天真 · 呆萌 · 温柔',
-      tags: ['天真', '温柔'],
-      birthday: '猫尾星纪 · 晴空倒影',
-      element: '海 · 倒影',
-      chapter: '第四叶',
-      quote: '虽然有点呆，但我一直都在努力变可爱！',
-      story: '拥有一头如澄澈海浪般微卷蓝发的猫尾女孩呆呆。戴着宽大的魔法兜帽，脚踩厚底运动鞋坐在水镜倒影中。她是一个很普通但又无比特别的小小存在，时刻期待着与你一同出发去看更大的世界。',
-      image: 'https://picui.ogmua.cn/s1/2026/09/13/6aa6ad2c1965f.webp',
-      freq: 783.99,
-      hue: ['#a9c8e8', '#4a6fa5']
-    }
-  ];
+  /* ─────────── 数据（来自 data.js，多页面共享） ─────────── */
+  const DATA = window.AETHERIA_DATA || {};
+  const CHARACTERS = DATA.characters || [];
+  const TIMELINE   = DATA.timeline   || [];
+  const ARCHIVE    = DATA.archive    || [];
+  const FILTERS    = DATA.filters    || [];
+  const FILMS      = DATA.films      || [];
 
-  const TIMELINE = [
-    { time: 'AE · 0001', title: '第一片叶落下', desc: 'AETHERIA 的世界以落叶计时。当第一片嫩芽脱离枝头，风便学会了说话 —— 那是幻叶第一次听见自己的名字。' },
-    { time: 'AE · 0007', title: '碧水微澜之日', desc: '小叶子坐在石栏上翻完了一整本画册。她没有说话，只是把书签夹进风里，从此每一页都能被风读懂。' },
-    { time: 'AE · 0013', title: '双生的晨曦', desc: '光与影在同一刻醒来。小白与小黑共享一次呼吸，也共享同一个避风港 —— 从此所有的角落都不再空旷。' },
-    { time: 'AE · 0021', title: '倒影里的远方', desc: '呆呆在水镜中看见比天空更大的世界。她握紧兜帽的边角，决定要亲眼去看一次 —— 哪怕路很长，哪怕有点呆。' },
-    { time: 'AE · NOW', title: '你推开了这扇门', desc: '绘卷在你眼前展开。每一次停留，都会有一片叶子记住你的名字。' }
-  ];
+  /* ─────────── 卡膜预设（收藏室切换，全站生效并记住选择） ─────────── */
+  const FILM_KEY = 'aetheria-film';
+  let currentFilm = 'classic';
 
-  const ARCHIVE = [
-    { key: 'WORLD',   val: '以落叶计时的世界', note: 'AETHERIA 没有钟表。人们以叶子的飘落次数记录相遇，因此每一次重逢都被精确地记得。' },
-    { key: 'MEDIUM',  val: '绘卷 · 数字立绘',   note: '全部立绘以数字绘画完成，保留手绘笔触与柔光叠层，长图不做裁切，完整呈现角色比例。' },
-    { key: 'SOUND',   val: '共鸣频率',          note: '每位角色拥有一段专属基频。开启环境音后，波形会随真实音频起伏 —— 那是她们的呼吸。' },
-    { key: 'GESTURE', val: '左右滑 · 下拉返回', note: '展厅内左右轻扫切换角色；页面滚到顶部后继续下拉，即可返回画廊。桌面端支持方向键与 Esc。' }
-  ];
-
-  const FILTERS = [
-    { key: 'all',   label: '全部绘卷' },
-    { key: '活泼', label: '活泼' },
-    { key: '温柔', label: '温柔' },
-    { key: '天真', label: '天真' },
-    { key: '双生', label: '双生' }
-  ];
+  function applyFilm(key) {
+    const k = FILMS.some(f => f.key === key) ? key : 'classic';
+    if (k === 'classic') delete root.dataset.film;
+    else root.dataset.film = k;
+    currentFilm = k;
+    return k;
+  }
+  try { applyFilm(localStorage.getItem(FILM_KEY) || 'classic'); } catch (e) { applyFilm('classic'); }
 
   /* ─────────── 主题 ─────────── */
   const THEME_KEY = 'aetheria-theme';
@@ -260,6 +194,7 @@
       <article class="card reveal" data-index="${i}" data-tags="${c.tags.join(' ')}" data-cursor="OPEN"
                tabindex="0" role="button" aria-label="查看 ${c.nameZh} 的物语">
         <div class="card-foil"></div>
+        <div class="card-sheen"></div>
         <div class="card-glare"></div>
         <div class="card-media">
           <span class="card-badge">${c.tag}</span>
@@ -306,9 +241,16 @@
         card.addEventListener('pointermove', (e) => tilt(e, card));
         card.addEventListener('pointerleave', () => resetTilt(card));
       }
-      card.addEventListener('click', () => openPavilion(+card.dataset.index, card));
+      // 有展厅的页面就地在展厅打开；无展厅的页面（首页）跳转到该角色独立页
+      const enter = () => {
+        const i = +card.dataset.index;
+        const it = CHARACTERS[i];
+        if (pav) openPavilion(i, card);
+        else if (it) location.href = 'character.html?id=' + encodeURIComponent(it.id);
+      };
+      card.addEventListener('click', enter);
       card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPavilion(+card.dataset.index, card); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enter(); }
       });
     });
 
@@ -331,14 +273,20 @@
       const py = clamp((ev.clientY - r.top) / r.height, 0, 1);
       const rx = (0.5 - py) * 13;
       const ry = (px - 0.5) * 15;
-      c.dataset.hovering = '1';   // 鼠标优先：悬停中的卡片不受陀螺仪接管
       c.style.transform = `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
       const ang = Math.atan2(py - 0.5, px - 0.5) * 180 / Math.PI + 90;
       const foil = $('.card-foil', c);
-      foil.style.setProperty('--foil-angle', ang + 'deg');
-      foil.style.opacity = '0.62';
+      if (foil) {
+        foil.style.setProperty('--foil-angle', ang + 'deg');
+        foil.style.opacity = '0.62';
+      }
+      // 镭射三层：彩虹膜角度 + 扫光带位移/旋转 + 高光斑位置（写在这张卡上，覆盖全局重力值）
       c.style.setProperty('--foil-x', px * 100 + '%');
       c.style.setProperty('--foil-y', py * 100 + '%');
+      c.style.setProperty('--sheen-x', ((px - 0.5) * 46).toFixed(1) + '%');
+      c.style.setProperty('--sheen-y', ((py - 0.5) * 46).toFixed(1) + '%');
+      c.style.setProperty('--sheen-rot', (ry * 0.5).toFixed(1) + 'deg');
+      c.style.setProperty('--sheen-opacity', '0.5');
     });
   }
   function resetTilt(c) {
@@ -346,6 +294,7 @@
     c.style.transform = '';
     const foil = $('.card-foil', c);
     if (foil) foil.style.opacity = '0';
+    c.style.setProperty('--sheen-opacity', '0');
   }
 
   /* ─────────── 时间线 / 档案 ─────────── */
@@ -361,12 +310,15 @@
 
   function renderArchive() {
     $('#archiveGrid').innerHTML = ARCHIVE.map(a => `
-      <div class="arc-card reveal">
+      <div class="arc-card holo reveal" data-tilt>
+        <div class="card-foil"></div>
+        <div class="card-sheen"></div>
         <div class="arc-key mono">${a.key}</div>
         <div class="arc-val">${a.val}</div>
         <p class="arc-note">${a.note}</p>
       </div>
     `).join('');
+    refreshTiltNodes();
   }
 
   /* ─────────── 音频引擎（真实频谱） ─────────── */
@@ -471,11 +423,12 @@
   });
 
   /* ─────────── 波形绘制 ─────────── */
-  const waveCanvas = $('#waveCanvas');
-  const wctx = waveCanvas.getContext('2d');
+  const waveCanvas = $('#waveCanvas');                 // 仅展厅页 / 角色页存在
+  const wctx = waveCanvas ? waveCanvas.getContext('2d') : null;
   let wavePhase = 0, waveEnergy = 0;
 
   function sizeWave() {
+    if (!waveCanvas || !wctx) return;
     const dpr = Math.min(devicePixelRatio || 1, 2);
     const w = waveCanvas.clientWidth || 560;
     const h = 46;
@@ -485,6 +438,7 @@
   }
 
   function drawWave() {
+    if (!waveCanvas || !wctx) return;
     const w = waveCanvas.clientWidth || 560;
     const h = 46;
     wctx.clearRect(0, 0, w, h);
@@ -613,8 +567,9 @@
     if (dustRunning) {
       if (t - lastDust > (reduceMotion ? 120 : 33)) { drawDust(); lastDust = t; }
     }
-    if (pavOpen) drawWave();
-    else applyGyroTilt();
+    if (pavOpen || onCharPage) drawWave();
+    applyGyroTilt();     // 与波形并存：镭射变量是全站共享的，任何页面都要刷新
+    applyManualTilt();   // 收藏室手动拨卡
     requestAnimationFrame(mainLoop);
   }
 
@@ -691,13 +646,22 @@
   toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }));
 
   const navLinks = $$('.nav-link');
-  const sectionIO = new IntersectionObserver((ens) => {
-    ens.forEach(en => {
-      if (!en.isIntersecting) return;
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id));
-    });
-  }, { threshold: 0.4 });
-  ['gallery', 'chronicle', 'archive'].forEach(id => { const s = $('#' + id); if (s) sectionIO.observe(s); });
+  const pageName = document.body.dataset.page || '';
+
+  // 多页面站点：按 data-page 高亮（角色页归入「绘卷」）；单页锚点滚动时再交给 IntersectionObserver
+  const NAV_MAP = { character: 'gallery' };
+  const activeNav = NAV_MAP[pageName] || pageName;
+  navLinks.forEach(l => l.classList.toggle('active', l.dataset.nav === activeNav));
+
+  if (!pageName) {
+    const sectionIO = new IntersectionObserver((ens) => {
+      ens.forEach(en => {
+        if (!en.isIntersecting) return;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id));
+      });
+    }, { threshold: 0.4 });
+    ['gallery', 'chronicle', 'archive'].forEach(id => { const s = $('#' + id); if (s) sectionIO.observe(s); });
+  }
 
   /* ─────────── 展厅 ─────────── */
   const pav = $('#pavilion');
@@ -747,6 +711,8 @@
     el.story.textContent = c.story;
     el.counter.textContent = `${String(pavIndex + 1).padStart(2, '0')} / ${String(CHARACTERS.length).padStart(2, '0')}`;
     el.caption.innerHTML = `<span>${c.chapter} · ${c.nameEn}</span><span>${c.tag}</span>`;
+    const deep = $('#pavDeep');
+    if (deep) deep.href = 'character.html?id=' + encodeURIComponent(c.id);
     syncDots();
 
     if (animateText && !reduceMotion) {
@@ -797,11 +763,11 @@
   const nextChar = () => goTo(pavIndex + 1);
   const prevChar = () => goTo(pavIndex - 1);
 
-  $('#pavClose').addEventListener('click', closePavilion);
-  $('#pavNext').addEventListener('click', nextChar);
-  $('#pavPrev').addEventListener('click', prevChar);
-  $('#pavZoom').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(); });
-  $('.pav-frame').addEventListener('click', () => openLightbox());
+  $('#pavClose')?.addEventListener('click', closePavilion);
+  $('#pavNext')?.addEventListener('click', nextChar);
+  $('#pavPrev')?.addEventListener('click', prevChar);
+  $('#pavZoom')?.addEventListener('click', (e) => { e.stopPropagation(); openLightbox(); });
+  $('.pav-frame')?.addEventListener('click', () => openLightbox());
 
   addEventListener('keydown', (e) => {
     if (lightboxOpen) { if (e.key === 'Escape') closeLightbox(); return; }
@@ -817,14 +783,14 @@
 
   /* 展厅手势：顶部下拉关闭 + 左右滑切换 */
   let sx = 0, sy = 0, dx = 0, dy = 0, atTop = false, pulling = false;
-  pav.addEventListener('touchstart', (e) => {
+  pav?.addEventListener('touchstart', (e) => {
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     dx = dy = 0;
     atTop = pav.scrollTop <= 0;
     pulling = false;
   }, { passive: true });
 
-  pav.addEventListener('touchmove', (e) => {
+  pav?.addEventListener('touchmove', (e) => {
     dx = e.touches[0].clientX - sx;
     dy = e.touches[0].clientY - sy;
     if (atTop && dy > 0 && dy > Math.abs(dx) * 1.3) {
@@ -837,7 +803,7 @@
     }
   }, { passive: true });
 
-  pav.addEventListener('touchend', () => {
+  pav?.addEventListener('touchend', () => {
     if (pulling) {
       if (dy > 90) { closePavilion(); }
       else { pavShift.style.transform = ''; pavDrag.classList.remove('armed'); $('#dragHint').textContent = '向下拉动返回画廊'; }
@@ -848,7 +814,7 @@
     }
   }, { passive: true });
 
-  pavDrag.addEventListener('click', closePavilion);
+  pavDrag?.addEventListener('click', closePavilion);
 
   /* ─────────── 放大查看 ─────────── */
   const lb = $('#lightbox'), lbImg = $('#lbImg');
@@ -870,17 +836,17 @@
     lb.setAttribute('aria-hidden', 'true');
     lightboxOpen = false;
   }
-  $('#lbClose').addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
-  lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+  $('#lbClose')?.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
 
-  lb.addEventListener('wheel', (e) => {
+  lb?.addEventListener('wheel', (e) => {
     if (!lightboxOpen) return;
     e.preventDefault();
     lbScale = clamp(lbScale * (e.deltaY > 0 ? 0.92 : 1.08), 0.6, 6);
     applyLb();
   }, { passive: false });
 
-  lb.addEventListener('pointerdown', (e) => {
+  lb?.addEventListener('pointerdown', (e) => {
     if (e.target.closest('.lb-close')) return;
     lbDrag = true; lbSX = e.clientX - lbX; lbSY = e.clientY - lbY;
     lb.classList.add('dragging');
@@ -891,7 +857,7 @@
   }, { passive: true });
   addEventListener('pointerup', () => { lbDrag = false; lb.classList.remove('dragging'); });
 
-  lb.addEventListener('touchstart', (e) => {
+  lb?.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
       pinchBase = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
@@ -899,7 +865,7 @@
       );
     }
   }, { passive: true });
-  lb.addEventListener('touchmove', (e) => {
+  lb?.addEventListener('touchmove', (e) => {
     if (e.touches.length === 2 && pinchBase) {
       const d = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
@@ -910,7 +876,7 @@
       applyLb();
     }
   }, { passive: true });
-  lb.addEventListener('touchend', () => { pinchBase = 0; });
+  lb?.addEventListener('touchend', () => { pinchBase = 0; });
 
   /* ─────────── 陀螺仪（移动端静默授权 + 卡片 3D 立体） ─────────── */
   let sensorsBound = false;
@@ -919,6 +885,10 @@
 
   // 卡片重力倾斜只交给真·触摸设备；桌面端仍归指针 hover 控制，二者不打架
   const canTiltByGyro = isTouch || (navigator.maxTouchPoints || 0) > 0;
+
+  // 除画廊网格外，任何页面只要给元素打上 data-tilt，就一起参与重力倾斜
+  let tiltNodes = $$('[data-tilt]');
+  function refreshTiltNodes() { tiltNodes = $$('[data-tilt]'); }
 
   /** 由主循环每帧统一应用，避免 deviceorientation 高频回调里反复写样式 */
   function applyGyroTilt() {
@@ -930,19 +900,29 @@
     curRy += (tRy - curRy) * 0.12;
     curRx += (tRx - curRx) * 0.12;
 
-    // 全息棱镜反光：反射角与高光位置跟随倾角，倾角越大流光越强（0.30 ~ 0.60）
-    const strength = clamp((Math.abs(curRy) + Math.abs(curRx)) / 24, 0, 1);
+    // 镭射卡面：反射角、扫光带位置与强度全部跟随倾角（倾角越大，彩虹与白光越强）
+    const strength = clamp((Math.abs(curRy) + Math.abs(curRx)) / 20, 0, 1);
     root.style.setProperty('--foil-angle', ((curRy * 2 - curRx * 2 + 180) % 360).toFixed(1) + 'deg');
     root.style.setProperty('--foil-x', clamp(50 + curRy * 2.2, 0, 100).toFixed(1) + '%');
     root.style.setProperty('--foil-y', clamp(50 + curRx * 2.2, 0, 100).toFixed(1) + '%');
-    root.style.setProperty('--foil-opacity', (0.3 + strength * 0.3).toFixed(3));
+    root.style.setProperty('--foil-opacity', (0.34 + strength * 0.36).toFixed(3));
     root.style.setProperty('--foil-glow', (0.22 + strength * 0.33).toFixed(3));
+    root.style.setProperty('--sheen-x', (curRy * 1.6).toFixed(1) + '%');
+    root.style.setProperty('--sheen-y', (curRx * 1.6).toFixed(1) + '%');
+    root.style.setProperty('--sheen-rot', (curRy * 0.8).toFixed(1) + 'deg');
+    root.style.setProperty('--sheen-opacity', (0.16 + strength * 0.44).toFixed(3));
 
-    if (pavOpen) return;
+    if (pavOpen) return;             // 展厅打开时不写卡片样式（变量照常刷新）
     const t = `perspective(1100px) rotateY(${curRy.toFixed(2)}deg) rotateX(${curRx.toFixed(2)}deg)`;
-    for (const c of grid.children) {          // live 集合，零查询开销
-      if (c.classList.contains('is-out')) continue;
-      if (c.dataset.hovering) continue;       // 鼠标悬停中的卡片交给指针控制
+    if (grid) {
+      for (const c of grid.children) {        // live 集合，零查询开销
+        if (c.classList.contains('is-out')) continue;
+        if (c.dataset.hovering) continue;     // 鼠标悬停中的卡片交给指针控制
+        c.style.transform = t;
+      }
+    }
+    for (const c of tiltNodes) {              // 其他页面标记的镭射卡（角色页立绘框等）
+      if (c.dataset.hovering) continue;
       c.style.transform = t;
     }
   }
@@ -977,8 +957,10 @@
       if (delta > 42) {
         lt = now;
         if (navigator.vibrate) navigator.vibrate([24, 40, 24]);
-        if (pavOpen) goTo(Math.floor(Math.random() * CHARACTERS.length));
-        else openPavilion(Math.floor(Math.random() * CHARACTERS.length));
+        const r = Math.floor(Math.random() * CHARACTERS.length);
+        if (pavOpen) goTo(r);
+        else if (pav) openPavilion(r);
+        else if (CHARACTERS[r]) location.href = 'character.html?id=' + encodeURIComponent(CHARACTERS[r].id);
       }
       lx = a.x; ly = a.y; lz = a.z;
     }, { passive: true });
@@ -993,14 +975,291 @@
       bindSensors();
     }
   }
-  // iOS 13+ 必须在真实用户手势里申请授权，三种入口覆盖点击 / 触摸 / 指针
-  ['touchstart', 'pointerdown', 'click'].forEach(ev =>
-    addEventListener(ev, initSensors, { once: true, passive: true })
-  );
+  // iOS 13+ 必须在真实用户手势里申请授权；Android / 桌面无需授权，直接绑定，
+  // 这样用户一进页面倾斜手机就有效果，不必先点一下屏幕。
+  const DOE = window.DeviceOrientationEvent;
+  const needsPermission = !!(DOE && typeof DOE.requestPermission === 'function');
+
+  if (needsPermission) {
+    ['touchstart', 'pointerdown', 'click'].forEach(ev =>
+      addEventListener(ev, initSensors, { once: true, passive: true })
+    );
+  } else {
+    initSensors();
+  }
+
+  /* ─────────── 角色详情页（character.html?id=haanye） ─────────── */
+  let onCharPage = false, charIdx = 0;
+
+  function initCharacterPage() {
+    if (!$('#charRoot')) return;
+    onCharPage = true;
+
+    const qid = new URLSearchParams(location.search).get('id');
+    let idx = CHARACTERS.findIndex(c => c.id === qid);
+    if (idx < 0) idx = 0;
+
+    const C = {
+      img: $('#charImg'), no: $('#charNo'), zh: $('#charNameZh'), en: $('#charNameEn'),
+      tag: $('#charTag'), quote: $('#charQuote'), meta: $('#charMeta'), skills: $('#charSkills'),
+      story: $('#charStory'), line: $('#charLine'), others: $('#charOthers')
+    };
+
+    function paint(i) {
+      charIdx = i;
+      const c = CHARACTERS[i];
+      document.title = `${c.nameZh} ${c.nameEn} · AETHERIA 萌叶幻想物语集`;
+
+      if (C.img) {
+        C.img.classList.remove('ready');
+        const im = new Image();
+        im.onload = im.onerror = () => { C.img.src = c.image; C.img.classList.add('ready'); };
+        im.src = c.image;
+        C.img.alt = c.nameZh + ' 立绘全景';
+      }
+      if (C.no)    C.no.textContent = `${c.chapter} · ${String(i + 1).padStart(2, '0')} / ${String(CHARACTERS.length).padStart(2, '0')}`;
+      if (C.zh)    C.zh.textContent = c.nameZh;
+      if (C.en)    C.en.textContent = c.nameEn;
+      if (C.tag)   C.tag.textContent = c.tag;
+      if (C.quote) C.quote.textContent = '“' + c.quote + '”';
+      if (C.line)  C.line.textContent = c.line;
+      if (C.story) C.story.textContent = c.story;
+
+      if (C.meta) {
+        C.meta.innerHTML = [
+          ['PERSONALITY', c.personality], ['BIRTH MARK', c.birthday],
+          ['ELEMENT', c.element],         ['RESONANCE', c.freq.toFixed(2) + ' Hz'],
+          ['SCENE', c.scene],             ['LIKES', c.likes]
+        ].map(([k, v]) => `<div class="meta-win"><div class="meta-title mono">${k}</div><div class="meta-val">${v}</div></div>`).join('');
+      }
+      if (C.skills) {
+        C.skills.innerHTML = c.skills.map(s => `<span class="chip-skill">${s}</span>`).join('');
+      }
+      if (C.others) {
+        C.others.innerHTML = CHARACTERS.map((o, j) => j === i ? '' : `
+          <a class="other-card" href="character.html?id=${encodeURIComponent(o.id)}">
+            <div class="other-thumb" style="background:linear-gradient(150deg,${o.hue[0]},${o.hue[1]})">
+              <img src="${o.image}" alt="${o.nameZh}" loading="lazy">
+            </div>
+            <div class="other-name"><b>${o.nameZh}</b><span class="mono">${o.nameEn}</span></div>
+          </a>`).join('');
+      }
+
+      if (!reduceMotion) {
+        [C.zh, C.en, C.quote, C.story].forEach((n, k) => n && n.animate(
+          [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 520, delay: k * 60, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' }
+        ));
+      }
+
+      history.replaceState(null, '', 'character.html?id=' + encodeURIComponent(c.id));
+      sizeWave();
+      Audio_.chime(c.freq);
+      if (navigator.vibrate) navigator.vibrate(12);
+    }
+
+    const step = (d) => {
+      paint((charIdx + d + CHARACTERS.length) % CHARACTERS.length);
+      scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+    $('#charPrev')?.addEventListener('click', () => step(-1));
+    $('#charNext')?.addEventListener('click', () => step(1));
+
+    addEventListener('keydown', (e) => {
+      if (!onCharPage || lightboxOpen) return;
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    });
+
+    paint(idx);
+  }
+
+  /* 共鸣按钮（展厅页与角色页共用同一个 id） */
+  (function bindResonance() {
+    const rb = $('#resoBtn');
+    if (!rb) return;
+    rb.addEventListener('click', () => {
+      if (!Audio_.enabled) {
+        Audio_.setEnabled(true);
+        soundBtn.setAttribute('aria-pressed', 'true');
+        soundBtn.setAttribute('aria-label', '关闭环境音');
+      }
+      const c = CHARACTERS[onCharPage ? charIdx : pavIndex];
+      if (c) Audio_.chime(c.freq);
+      rb.classList.add('playing');
+      setTimeout(() => rb.classList.remove('playing'), 900);
+    });
+  })();
+
+  /* ─────────── 镭射收藏室（collection.html） ─────────── */
+  let lab = null;   // { card, rx, ry, auto, gyro }
+
+  function initCollectionPage() {
+    const stage = $('#labStage');
+    if (!stage) return;
+
+    const card = $('#labCard'), img = $('#labImg'), picker = $('#labPicker');
+    const filmsBox = $('#labFilms'), note = $('#labFilmNote');
+    const zh = $('#labNameZh'), en = $('#labNameEn'), no = $('#labNo');
+    const boost = $('#labBoost'), boostVal = $('#labBoostVal');
+    const btnAuto = $('#labAuto'), btnGyro = $('#labGyro'), btnReset = $('#labReset');
+    const outRx = $('#labRx'), outRy = $('#labRy'), outAng = $('#labAng');
+
+    let idx = 0, tick = 0;
+    lab = { card, rx: -6, ry: 10, auto: false, gyro: true };
+
+    /* 卡膜预设 */
+    if (filmsBox) {
+      filmsBox.innerHTML = FILMS.map(f =>
+        `<button class="lab-chip" data-film="${f.key}" aria-pressed="false">${f.label}</button>`).join('');
+      const paintFilm = () => {
+        $$('.lab-chip', filmsBox).forEach(b =>
+          b.setAttribute('aria-pressed', String(b.dataset.film === currentFilm)));
+        const f = FILMS.find(x => x.key === currentFilm);
+        if (note && f) note.textContent = f.note;
+      };
+      filmsBox.addEventListener('click', (e) => {
+        const b = e.target.closest('.lab-chip');
+        if (!b) return;
+        applyFilm(b.dataset.film);
+        try { localStorage.setItem(FILM_KEY, currentFilm); } catch (err) {}
+        paintFilm();
+        if (CHARACTERS[idx]) Audio_.chime(CHARACTERS[idx].freq);
+        if (navigator.vibrate) navigator.vibrate(10);
+      });
+      paintFilm();
+    }
+
+    /* 光强度 */
+    if (boost) {
+      const syncBoost = () => {
+        root.style.setProperty('--foil-boost', boost.value);
+        if (boostVal) boostVal.textContent = (+boost.value).toFixed(1) + '×';
+      };
+      boost.addEventListener('input', syncBoost);
+      syncBoost();
+    }
+
+    /* 角色选择 */
+    if (picker) {
+      picker.innerHTML = CHARACTERS.map((c, i) => `
+        <button class="lab-thumb" data-i="${i}" aria-label="选择 ${c.nameZh}">
+          <span class="lab-thumb-box" style="background:linear-gradient(150deg,${c.hue[0]},${c.hue[1]})">
+            <img src="${c.image}" alt="${c.nameZh}" loading="lazy">
+          </span>
+          <span class="lab-thumb-name">${c.nameZh}</span>
+        </button>`).join('');
+      picker.addEventListener('click', (e) => {
+        const b = e.target.closest('.lab-thumb');
+        if (b) paint(+b.dataset.i);
+      });
+    }
+
+    function paint(i) {
+      idx = i;
+      const c = CHARACTERS[i];
+      if (!c) return;
+      card.style.setProperty('--card-hue-a', c.hue[0]);
+      card.style.setProperty('--card-hue-b', c.hue[1]);
+      img.classList.remove('ready');
+      const pre = new Image();
+      pre.onload = pre.onerror = () => { img.src = c.image; img.classList.add('ready'); };
+      pre.src = c.image;
+      img.alt = c.nameZh + ' 镭射卡面';
+      if (zh) zh.textContent = c.nameZh;
+      if (en) en.textContent = c.nameEn.toUpperCase();
+      if (no) no.textContent = `${String(i + 1).padStart(2, '0')} / ${String(CHARACTERS.length).padStart(2, '0')}`;
+      $$('.lab-thumb', picker).forEach(b => b.classList.toggle('on', +b.dataset.i === i));
+      Audio_.chime(c.freq);
+      if (navigator.vibrate) navigator.vibrate(12);
+    }
+
+    /* 拖动 / 滑动转卡 */
+    let sx = 0, sy = 0, brx = 0, bry = 0, dragId = null;
+    stage.addEventListener('pointerdown', (e) => {
+      dragId = e.pointerId; sx = e.clientX; sy = e.clientY;
+      brx = lab.rx; bry = lab.ry;
+      stage.classList.add('dragging');
+      if (stage.setPointerCapture) { try { stage.setPointerCapture(dragId); } catch (err) {} }
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (dragId === null || e.pointerId !== dragId) return;
+      lab.ry = clamp(bry + (e.clientX - sx) * 0.32, -38, 38);
+      lab.rx = clamp(brx - (e.clientY - sy) * 0.26, -28, 28);
+    });
+    const endDrag = () => { dragId = null; stage.classList.remove('dragging'); };
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+    stage.addEventListener('pointerleave', endDrag);
+
+    /* 自动摇曳 / 重力跟随 / 复位 */
+    if (btnAuto) btnAuto.addEventListener('click', () => {
+      lab.auto = !lab.auto;
+      btnAuto.setAttribute('aria-pressed', String(lab.auto));
+      btnAuto.classList.toggle('on', lab.auto);
+    });
+    if (btnGyro) btnGyro.addEventListener('click', () => {
+      lab.gyro = !lab.gyro;
+      btnGyro.setAttribute('aria-pressed', String(lab.gyro));
+      btnGyro.classList.toggle('on', lab.gyro);
+      if (lab.gyro) initSensors();
+    });
+    if (btnGyro) btnGyro.classList.toggle('on', lab.gyro);
+    if (btnReset) btnReset.addEventListener('click', () => { lab.rx = -6; lab.ry = 10; });
+
+    /* 姿态读数（每 6 帧刷一次，避免频繁写文本） */
+    lab.readout = () => {
+      if (++tick % 6) return;
+      if (outRx) outRx.textContent = 'X ' + lab.rx.toFixed(1) + '°';
+      if (outRy) outRy.textContent = 'Y ' + lab.ry.toFixed(1) + '°';
+      if (outAng) outAng.textContent = 'FOIL ' + Math.round((lab.ry * 2 - lab.rx * 2 + 540) % 360) + '°';
+    };
+
+    addEventListener('keydown', (e) => {
+      if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight') paint((idx + 1) % CHARACTERS.length);
+      if (e.key === 'ArrowLeft') paint((idx - 1 + CHARACTERS.length) % CHARACTERS.length);
+    });
+
+    paint(0);
+  }
+
+  /** 收藏室大卡的姿态：手动拖动 + 自动摇曳 + 重力叠加，并把镭射变量写到卡自身 */
+  function applyManualTilt() {
+    if (!lab) return;
+    let rx = lab.rx, ry = lab.ry;
+
+    if (lab.auto && !reduceMotion) {
+      const t = performance.now() / 1000;
+      ry += Math.sin(t * 0.65) * 20;
+      rx += Math.sin(t * 0.45 + 1.1) * 11;
+    }
+    if (lab.gyro && gyroActive) { ry += curRy * 1.8; rx += curRx * 1.8; }
+
+    ry = clamp(ry, -46, 46); rx = clamp(rx, -34, 34);
+    lab.card.style.transform = `perspective(1200px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg)`;
+
+    // 卡膜跟随这张卡自己的姿态（桌面拖动、自动摇曳时同样能看到镭射流动）
+    const strength = clamp((Math.abs(rx) + Math.abs(ry)) / 34, 0.18, 1);
+    const s = lab.card.style;
+    s.setProperty('--foil-angle', ((ry * 2 - rx * 2 + 540) % 360).toFixed(1) + 'deg');
+    s.setProperty('--foil-x', clamp(50 + ry * 1.4, 0, 100).toFixed(1) + '%');
+    s.setProperty('--foil-y', clamp(50 + rx * 1.6, 0, 100).toFixed(1) + '%');
+    s.setProperty('--foil-opacity', (0.34 + strength * 0.46).toFixed(3));
+    s.setProperty('--foil-glow', (0.20 + strength * 0.42).toFixed(3));
+    s.setProperty('--sheen-x', (ry * 1.1).toFixed(1) + '%');
+    s.setProperty('--sheen-y', (rx * 1.1).toFixed(1) + '%');
+    s.setProperty('--sheen-rot', (ry * 0.7).toFixed(1) + 'deg');
+    s.setProperty('--sheen-opacity', (0.14 + strength * 0.5).toFixed(3));
+
+    if (lab.readout) lab.readout();
+  }
 
   /* ─────────── 随机相遇 ─────────── */
-  $('#surpriseBtn').addEventListener('click', () => {
-    openPavilion(Math.floor(Math.random() * CHARACTERS.length), $('#surpriseBtn'));
+  $('#surpriseBtn')?.addEventListener('click', (e) => {
+    const i = Math.floor(Math.random() * CHARACTERS.length);
+    if (pav) openPavilion(i, e.currentTarget);
+    else if (CHARACTERS[i]) location.href = 'character.html?id=' + encodeURIComponent(CHARACTERS[i].id);
   });
 
   /* ─────────── 尺寸 / 启动 ─────────── */
@@ -1010,13 +1269,16 @@
   }
   addEventListener('resize', onResize, { passive: true });
 
-  $('#yearSpan').textContent = new Date().getFullYear();
+  { const ys = $('#yearSpan'); if (ys) ys.textContent = new Date().getFullYear(); }
 
-  renderFilters();
-  renderCards();
-  renderTimeline();
-  renderArchive();
-  renderDots();
+  if ($('#filters')) renderFilters();
+  if ($('#galleryGrid')) renderCards();
+  if ($('#timeline')) renderTimeline();
+  if ($('#archiveGrid')) renderArchive();
+  if (pavDots) renderDots();
+  initCharacterPage();
+  initCollectionPage();
+  sizeWave();
   observeReveals();
   onResize();
   onScroll();

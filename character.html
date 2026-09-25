@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f7f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080d0b" media="(prefers-color-scheme: dark)">
+<title>角色绘卷 | AETHERIA 萌叶幻想物语集</title>
+<meta name="description" content="AETHERIA 角色独立绘卷页 —— 立绘全景、性格档案、共鸣频率与物语叙事。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C24 9 28 15 16 29 C 4 15 8 9 16 3Z' fill='%2348725e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<noscript><style>.reveal{opacity:1;translate:none}.preloader{display:none}</style></noscript>
+</head>
+
+<body data-page="character">
+
+<div class="preloader" id="preloader" role="status" aria-live="polite">
+  <div class="pre-inner">
+    <div class="pre-mark">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--accent-2)"/>
+        </linearGradient></defs>
+        <path class="leaf-path" d="M32 6 C 46 18, 54 30, 32 58 C 10 30, 18 18, 32 6 Z" fill="none" stroke="url(#leafGrad)" stroke-width="1.6" stroke-linecap="round"/>
+        <path class="leaf-vein" d="M32 12 L32 54 M32 26 L42 20 M32 36 L40 32 M32 26 L22 20 M32 36 L24 32" fill="none" stroke="url(#leafGrad)" stroke-width="1.1" stroke-linecap="round" opacity=".65"/>
+      </svg>
+    </div>
+    <div class="pre-word">PERSONA</div>
+    <div class="pre-bar"><span id="preBar"></span></div>
+    <div class="pre-pct"><span id="prePct">0</span>% · 正在唤醒人格</div>
+  </div>
+</div>
+
+<div class="ambient" aria-hidden="true">
+  <div class="aurora aurora-a" data-depth="24"></div>
+  <div class="aurora aurora-b" data-depth="40"></div>
+  <div class="aurora aurora-c" data-depth="60"></div>
+  <div class="grain"></div>
+  <canvas id="stardust"></canvas>
+</div>
+
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span id="cursorLabel"></span></div>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="nav-brand" href="index.html" aria-label="返回首页">
+    <svg class="brand-leaf" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 3 C 24 9, 28 15, 16 29 C 4 15, 8 9, 16 3 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-text">AETHERIA</span>
+  </a>
+  <nav class="nav-links" aria-label="主导航">
+    <a href="index.html"     class="nav-link" data-nav="home">首页<span>Home</span></a>
+    <a href="gallery.html"   class="nav-link" data-nav="gallery">绘卷<span>Gallery</span></a>
+    <a href="chronicle.html" class="nav-link" data-nav="chronicle">编年<span>Chronicle</span></a>
+    <a href="archive.html"   class="nav-link" data-nav="archive">档案<span>Archive</span></a>
+    <a href="collection.html" class="nav-link" data-nav="collection">收藏<span>Holo</span></a>
+  </nav>
+  <div class="nav-tools">
+    <button class="icon-btn" id="soundToggle" aria-pressed="false" aria-label="开启环境音" title="环境音 (S)">
+      <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" aria-label="切换深色模式" title="主题 (T)">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></g></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.6 8.6 0 1 0 10.2 10.2Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="section page-section" id="charRoot">
+
+    <!-- 立绘 + 头部 -->
+    <div class="char-hero">
+      <figure class="char-visual">
+        <div class="char-frame holo" data-tilt>
+          <div class="card-foil"></div>
+          <div class="card-sheen"></div>
+          <div class="card-glare"></div>
+          <img class="char-img" id="charImg" alt="角色立绘全景" draggable="false">
+        </div>
+      </figure>
+      <p class="char-holo-tip mono">倾斜手机 · 立绘卡面镭射随光线流转</p>
+
+      <div class="char-head">
+        <div class="char-no mono" id="charNo"></div>
+        <h1 class="char-name-zh" id="charNameZh"></h1>
+        <div class="char-name-en" id="charNameEn"></div>
+        <div class="char-tag" id="charTag"></div>
+        <p class="char-quote" id="charQuote"></p>
+        <div class="char-skills" id="charSkills"></div>
+      </div>
+    </div>
+
+    <!-- 共鸣波形 -->
+    <div class="resonance char-reso reveal">
+      <div class="reso-head">
+        <span class="reso-label mono">RESONANCE · 共鸣波形</span>
+        <button class="reso-btn" id="resoBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor"/></svg>
+          <span>聆听</span>
+        </button>
+      </div>
+      <canvas id="waveCanvas" width="600" height="72" aria-hidden="true"></canvas>
+    </div>
+
+    <!-- 档案窗格 -->
+    <div class="meta-grid char-meta reveal" id="charMeta"></div>
+
+    <!-- 物语 -->
+    <div class="story char-story reveal">
+      <div class="story-mark" aria-hidden="true">“</div>
+      <p class="story-text" id="charStory"></p>
+      <p class="char-line" id="charLine"></p>
+    </div>
+
+    <!-- 上一位 / 下一位 -->
+    <div class="char-nav">
+      <button class="pav-arrow" id="charPrev" aria-label="上一位角色">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8.5 12 14 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>上一位</span>
+      </button>
+      <a class="btn btn-ghost" href="gallery.html">返回绘卷展厅</a>
+      <button class="pav-arrow" id="charNext" aria-label="下一位角色">
+        <span>下一位</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6 15.5 12 10 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- 其他角色 -->
+    <div class="char-others-wrap reveal">
+      <h3 class="sub-title">其他叶子</h3>
+      <div class="char-others" id="charOthers"></div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">AETHERIA</span>
+      <p>萌叶幻想物语集 · 虚拟人格艺术绘卷</p>
+    </div>
+    <nav class="footer-links">
+      <a href="index.html">首页</a><a href="gallery.html">绘卷</a>
+      <a href="chronicle.html">编年</a><a href="archive.html">档案</a><a href="collection.html">收藏</a>
+    </nav>
+    <div class="footer-meta mono"><span>huanye-xiaoyezi</span><span>·</span><span id="yearSpan">2026</span></div>
+    <button class="to-top" id="toTop" aria-label="返回顶部">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M5.5 12.5 12 6l6.5 6.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
