@@ -330,6 +330,7 @@
       const py = clamp((ev.clientY - r.top) / r.height, 0, 1);
       const rx = (0.5 - py) * 13;
       const ry = (px - 0.5) * 15;
+      c.dataset.hovering = '1';   // 鼠标优先：悬停中的卡片不受陀螺仪接管
       c.style.transform = `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
       const ang = Math.atan2(py - 0.5, px - 0.5) * 180 / Math.PI + 90;
       const foil = $('.card-foil', c);
@@ -340,6 +341,7 @@
     });
   }
   function resetTilt(c) {
+    delete c.dataset.hovering;
     c.style.transform = '';
     const foil = $('.card-foil', c);
     if (foil) foil.style.opacity = '0';
@@ -611,6 +613,7 @@
       if (t - lastDust > (reduceMotion ? 120 : 33)) { drawDust(); lastDust = t; }
     }
     if (pavOpen) drawWave();
+    else applyGyroTilt();
     requestAnimationFrame(mainLoop);
   }
 
@@ -908,16 +911,38 @@
   }, { passive: true });
   lb.addEventListener('touchend', () => { pinchBase = 0; });
 
-  /* ─────────── 陀螺仪（移动端静默授权） ─────────── */
+  /* ─────────── 陀螺仪（移动端静默授权 + 卡片 3D 立体） ─────────── */
   let sensorsBound = false;
+  let gyroActive = false, gyroGamma = 0, gyroBeta = 45, lastGyroT = '';
+
+  /** 由主循环每帧统一应用，避免 deviceorientation 高频回调里反复写样式 */
+  function applyGyroTilt() {
+    if (!gyroActive || pavOpen) return;
+    const ry = clamp(gyroGamma * 0.28, -14, 14);
+    const rx = clamp(-(gyroBeta - 45) * 0.28, -12, 12);
+    const t = `perspective(1100px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg)`;
+    if (t === lastGyroT) return;           // 脏检查：姿态没变就不碰 DOM
+    lastGyroT = t;
+    $$('.card:not(.is-out)', grid).forEach(c => {
+      if (c.dataset.hovering) return;
+      c.style.transform = t;
+    });
+  }
+
   function bindSensors() {
     if (sensorsBound) return;
     sensorsBound = true;
     const onOrient = (e) => {
+      if (e.gamma == null && e.beta == null) return;   // 设备没有真实传感器
       const gamma = e.gamma || 0, beta = e.beta || 0;
+      gyroActive = true;
+      gyroGamma = gamma;
+      gyroBeta = beta;
+
       targetPX = clamp(gamma / 35, -1, 1);
       targetPY = clamp((beta - 45) / 35, -1, 1);
-      // 全息反光：手机倾斜时整页共享一个反射角
+
+      // 全息反光：手机倾斜时整页共享一个反射角，卡片随之流光
       root.style.setProperty('--foil-angle', ((gamma * 2 + beta * 2 + 180) % 360) + 'deg');
       root.style.setProperty('--foil-x', clamp((gamma + 30) / 60 * 100, 0, 100) + '%');
       root.style.setProperty('--foil-y', clamp((beta - 20) / 50 * 100, 0, 100) + '%');
