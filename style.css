@@ -531,7 +531,8 @@ a { color: inherit; text-decoration: none; }
 /* 全息流光 */
 .card-foil {
   position: absolute; inset: 0; z-index: 4; pointer-events: none;
-  mix-blend-mode: color-dodge; opacity: 0;
+  mix-blend-mode: color-dodge;
+  opacity: var(--foil-opacity, 0);   /* 手机端由陀螺仪点亮 --foil-opacity，桌面端 hover 由 JS 内联覆盖 */
   background: linear-gradient(var(--foil-angle, 135deg),
     transparent 28%,
     rgba(255,179,193,.42) 42%,

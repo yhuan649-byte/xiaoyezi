@@ -913,20 +913,23 @@
 
   /* ─────────── 陀螺仪（移动端静默授权 + 卡片 3D 立体） ─────────── */
   let sensorsBound = false;
-  let gyroActive = false, gyroGamma = 0, gyroBeta = 45, lastGyroT = '';
+  let gyroActive = false, gyroGamma = 0, gyroBeta = 45;
+  let curRx = 0, curRy = 0;   // 当前平滑角度（逐帧逼近目标，消除传感器原始抖动）
 
   /** 由主循环每帧统一应用，避免 deviceorientation 高频回调里反复写样式 */
   function applyGyroTilt() {
-    if (!gyroActive || pavOpen) return;
-    const ry = clamp(gyroGamma * 0.28, -14, 14);
-    const rx = clamp(-(gyroBeta - 45) * 0.28, -12, 12);
-    const t = `perspective(1100px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg)`;
-    if (t === lastGyroT) return;           // 脏检查：姿态没变就不碰 DOM
-    lastGyroT = t;
-    $$('.card:not(.is-out)', grid).forEach(c => {
-      if (c.dataset.hovering) return;
+    if (!gyroActive) return;
+    const tRy = clamp(gyroGamma * 0.3, -16, 16);
+    const tRx = clamp(-(gyroBeta - 45) * 0.3, -14, 14);
+    curRy += (tRy - curRy) * 0.12;
+    curRx += (tRx - curRx) * 0.12;
+    if (pavOpen) return;
+    const t = `perspective(1100px) rotateY(${curRy.toFixed(2)}deg) rotateX(${curRx.toFixed(2)}deg)`;
+    for (const c of grid.children) {          // live 集合，零查询开销
+      if (c.classList.contains('is-out')) continue;
+      if (c.dataset.hovering) continue;       // 鼠标悬停中的卡片交给指针控制
       c.style.transform = t;
-    });
+    }
   }
 
   function bindSensors() {
@@ -942,10 +945,11 @@
       targetPX = clamp(gamma / 35, -1, 1);
       targetPY = clamp((beta - 45) / 35, -1, 1);
 
-      // 全息反光：手机倾斜时整页共享一个反射角，卡片随之流光
+      // 全息反光：手机倾斜时整页共享一个反射角，卡片随之流光（首次传感器数据到达即点亮）
       root.style.setProperty('--foil-angle', ((gamma * 2 + beta * 2 + 180) % 360) + 'deg');
       root.style.setProperty('--foil-x', clamp((gamma + 30) / 60 * 100, 0, 100) + '%');
       root.style.setProperty('--foil-y', clamp((beta - 20) / 50 * 100, 0, 100) + '%');
+      root.style.setProperty('--foil-opacity', '0.5');
     };
     if ('DeviceOrientationEvent' in window) {
       addEventListener('deviceorientation', onOrient, { passive: true });
