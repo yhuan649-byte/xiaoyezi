@@ -1,1924 +1,286 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light" data-page-node-id="5BvItpvTq8gJPsL3fQpxKT">
-<head data-page-node-id="rZZ73wf1C2T7UhBDmg0BHW">
-  <meta charset="UTF-8" data-page-node-id="bs1NUwlYUari9ol5gfx3n3">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" data-page-node-id="2dIsvH1mmAfpPgMPxNnX8R">
-  <meta name="description" content="AETHERIA · 萌叶幻想物语集 — 沉浸式虚拟角色艺术画廊" data-page-node-id="R7Fp4LCZwfJROYLlYCQ6lc">
-  <title>AETHERIA · 萌叶幻想物语集</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="2T2LHcOdR7UHQXoRe8PqG6">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="RMbySZR1bT3pQCURMol2FJ">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+SC:wght@300;400;600&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet" data-page-node-id="HUPr4cYVA8rOPjHAfSK6Av">
-
-  <style>
-    /* ================= 视觉变量与主题系统 ================= */
-    :root {
-      --bg-color: #f6f8f6;
-      --bg-deep: #eef2ee;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --panel-bg: rgba(255, 255, 255, 0.7);
-      --text-main: #1e293b;
-      --text-strong: #0f172a;
-      --text-sub: #64748b;
-      --text-faint: #94a3b8;
-      --accent: #48725e;
-      --accent-glow: rgba(72, 114, 94, 0.35);
-      --accent-soft: rgba(72, 114, 94, 0.08);
-      --border-soft: rgba(255, 255, 255, 0.85);
-      --border-line: rgba(0, 0, 0, 0.06);
-      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
-      --shadow-card-hover: 0 24px 50px rgba(0, 0, 0, 0.09);
-      --particle-rgb: 72, 114, 94;
-      --aurora-1: rgba(195, 237, 214, 0.38);
-      --aurora-2: rgba(204, 226, 248, 0.42);
-      --aurora-3: rgba(247, 227, 215, 0.30);
-      --foil-x: 50%;
-      --foil-y: 50%;
-      --foil-angle: 135deg;
-      --foil-opacity: 0;
-      --transition-spring: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    [data-theme="dark"] {
-      --bg-color: #0c1210;
-      --bg-deep: #080d0b;
-      --card-bg: rgba(22, 32, 27, 0.82);
-      --panel-bg: rgba(24, 36, 30, 0.72);
-      --text-main: #d7e0da;
-      --text-strong: #f1f7f2;
-      --text-sub: #8fa398;
-      --text-faint: #5f7268;
-      --accent: #7cc49c;
-      --accent-glow: rgba(124, 196, 156, 0.30);
-      --accent-soft: rgba(124, 196, 156, 0.10);
-      --border-soft: rgba(255, 255, 255, 0.08);
-      --border-line: rgba(255, 255, 255, 0.07);
-      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.3);
-      --shadow-card-hover: 0 24px 55px rgba(0, 0, 0, 0.5);
-      --particle-rgb: 124, 196, 156;
-      --aurora-1: rgba(58, 110, 82, 0.28);
-      --aurora-2: rgba(48, 78, 110, 0.30);
-      --aurora-3: rgba(96, 70, 88, 0.22);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Serif SC", serif;
-      overflow-x: hidden;
-      line-height: 1.6;
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    ::selection { background: var(--accent-soft); color: var(--accent); }
-
-    /* 自定义滚动条 */
-    ::-webkit-scrollbar { width: 9px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-soft);
-      border-radius: 10px;
-      border: 2px solid var(--bg-color);
-    }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent-glow); }
-
-    /* ================= 预加载启动屏 ================= */
-    #preloader {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: var(--bg-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.4rem;
-      transition: opacity 0.7s ease, visibility 0.7s ease;
-    }
-    #preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
-
-    .pre-leaf {
-      width: 52px;
-      height: 52px;
-      animation: leafFloat 2.2s ease-in-out infinite;
-      filter: drop-shadow(0 6px 14px var(--accent-glow));
-    }
-    @keyframes leafFloat {
-      0%, 100% { transform: translateY(0) rotate(-4deg); }
-      50% { transform: translateY(-10px) rotate(6deg); }
-    }
-    .pre-word {
-      font-family: 'Cinzel', serif;
-      font-size: 1.15rem;
-      letter-spacing: 0.55em;
-      color: var(--accent);
-      text-indent: 0.55em;
-    }
-    .pre-word span {
-      display: inline-block;
-      opacity: 0;
-      animation: letterIn 0.6s var(--ease-out) forwards;
-      animation-delay: calc(var(--i) * 0.09s);
-    }
-    @keyframes letterIn {
-      from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-    .pre-bar {
-      width: 168px;
-      height: 2px;
-      background: var(--border-line);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .pre-bar i {
-      display: block;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), #a3d9bd);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-    .pre-sub { font-size: 0.68rem; color: var(--text-faint); letter-spacing: 0.2em; }
-
-    /* ================= 顶部滚动进度条 ================= */
-    #scrollProgress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 0%;
-      z-index: 300;
-      background: linear-gradient(90deg, var(--accent), #a3d9bd, #8fb8e8);
-      box-shadow: 0 0 12px var(--accent-glow);
-      pointer-events: none;
-      transition: width 0.1s linear;
-    }
-
-    /* ================= 环境层 ================= */
-    #ambientCanvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .ambient-aurora {
-      position: fixed;
-      top: -40%;
-      left: -40%;
-      width: 180vw;
-      height: 180vh;
-      pointer-events: none;
-      z-index: 0;
-      background: radial-gradient(circle at 35% 30%, var(--aurora-1) 0%, transparent 45%),
-                  radial-gradient(circle at 75% 65%, var(--aurora-2) 0%, transparent 50%),
-                  radial-gradient(circle at 50% 85%, var(--aurora-3) 0%, transparent 40%);
-      transition: transform 0.1s ease-out;
-      will-change: transform;
-      animation: auroraDrift 26s ease-in-out infinite alternate;
-    }
-    @keyframes auroraDrift {
-      from { filter: hue-rotate(0deg) saturate(1); }
-      to { filter: hue-rotate(18deg) saturate(1.15); }
-    }
-
-    /* 噪点颗粒质感 */
-    .grain {
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0.05;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-    }
-
-    /* 桌面端自定义光标 */
-    .cursor-dot, .cursor-ring { display: none; }
-    @media (pointer: fine) {
-      .cursor-dot, .cursor-ring {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 900;
-        pointer-events: none;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-      }
-      .cursor-dot {
-        width: 6px; height: 6px;
-        background: var(--accent);
-        box-shadow: 0 0 10px var(--accent-glow);
-      }
-      .cursor-ring {
-        width: 34px; height: 34px;
-        border: 1.5px solid var(--accent-glow);
-        transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      }
-      .cursor-ring.hovering {
-        width: 52px; height: 52px;
-        background: var(--accent-soft);
-        border-color: var(--accent);
-      }
-    }
-
-    /* ================= 导航栏 ================= */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem 1.4rem;
-      transition: var(--transition-spring);
-      transform: translateY(-110%);
-    }
-    .nav.visible { transform: translateY(0); }
-    .nav.scrolled {
-      background: var(--card-bg);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border-line);
-      padding: 0.6rem 1.4rem;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
-      color: var(--accent);
-      cursor: pointer;
-    }
-    .nav-brand svg { width: 20px; height: 20px; }
-    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
-
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      border: 1px solid var(--border-line);
-      background: var(--panel-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: var(--text-sub);
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: var(--transition-spring);
-    }
-    .icon-btn:hover {
-      color: var(--accent);
-      border-color: var(--accent-glow);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px var(--accent-soft);
-    }
-    .icon-btn.active { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-
-    /* ================= 头部介绍 ================= */
-    header {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      padding: 7.5rem 1.5rem 2rem 1.5rem;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    .brand-eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.8rem;
-      display: inline-block;
-      padding: 0.35rem 1rem;
-      border: 1px solid var(--accent-glow);
-      border-radius: 40px;
-      background: var(--accent-soft);
-      animation: fadeUp 0.9s var(--ease-out) both;
-    }
-
-    .brand-title {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.9rem;
-      background: linear-gradient(120deg, var(--text-strong) 20%, var(--accent) 55%, var(--text-strong) 90%);
-      background-size: 220% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shineText 6s linear infinite, fadeUp 0.9s 0.15s var(--ease-out) both;
-    }
-    @keyframes shineText { to { background-position: 220% center; } }
-
-    .brand-desc {
-      font-size: 0.88rem;
-      color: var(--text-sub);
-      letter-spacing: 0.05em;
-      animation: fadeUp 0.9s 0.3s var(--ease-out) both;
-    }
-    .brand-desc b { color: var(--accent); font-weight: 600; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-
-    /* ================= 筛选工具条 ================= */
-    .filter-bar {
-      position: relative;
-      z-index: 3;
-      max-width: 1240px;
-      margin: 0.6rem auto 0 auto;
-      padding: 0 1.2rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.55rem;
-      animation: fadeUp 0.9s 0.45s var(--ease-out) both;
-    }
-    .chip {
-      padding: 0.42rem 1.05rem;
-      border-radius: 40px;
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      color: var(--text-sub);
-      background: var(--panel-bg);
-      border: 1px solid var(--border-line);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      cursor: pointer;
-      transition: var(--transition-spring);
-    }
-    .chip:hover { color: var(--accent); border-color: var(--accent-glow); transform: translateY(-2px); }
-    .chip.active {
-      color: #fff;
-      background: var(--accent);
-      border-color: var(--accent);
-      box-shadow: 0 6px 18px var(--accent-glow);
-    }
-    .chip .cnt { opacity: 0.65; font-size: 0.68rem; margin-left: 0.25rem; }
-
-    /* ================= 主画廊卡片网格 ================= */
-    .gallery-grid {
-      position: relative;
-      z-index: 3;
-      max-width: 1240px;
-      margin: 2.2rem auto 3rem auto;
-      padding: 0 1.2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 2.2rem;
-      perspective: 1400px;
-    }
-
-    .gallery-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      color: var(--text-faint);
-      padding: 4rem 0;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-    }
-
-    .card {
-      position: relative;
-      background: var(--card-bg);
-      border-radius: 20px;
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-card);
-      overflow: hidden;
-      cursor: pointer;
-      transform-style: preserve-3d;
-      transition: transform 0.2s ease-out, box-shadow 0.4s ease, opacity 0.7s var(--ease-out);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      opacity: 0;
-      transform: translateY(36px);
-    }
-    .card.revealed {
-      opacity: 1;
-      transform: translateY(0);
-      transition: transform 0.7s var(--ease-out), box-shadow 0.4s ease, opacity 0.7s var(--ease-out);
-    }
-    .card.revealed:hover { box-shadow: var(--shadow-card-hover); }
-    .card.hidden { display: none; }
-
-    /* 全息棱镜反射流光 */
-    .card-foil {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
-      mix-blend-mode: color-dodge;
-      opacity: var(--foil-opacity);
-      background: linear-gradient(
-        var(--foil-angle),
-        transparent 0%,
-        rgba(255, 255, 255, 0) 30%,
-        rgba(255, 179, 193, 0.45) 42%,
-        rgba(255, 236, 179, 0.65) 48%,
-        rgba(179, 235, 255, 0.55) 54%,
-        rgba(218, 179, 255, 0.45) 60%,
-        transparent 75%
-      );
-      transition: opacity 0.3s ease;
-    }
-
-    .card-glare {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      pointer-events: none;
-      background: radial-gradient(
-        circle at var(--foil-x) var(--foil-y),
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0) 60%
-      );
-      mix-blend-mode: overlay;
-      opacity: 0.6;
-    }
-
-    .card-media {
-      position: relative;
-      width: 100%;
-      padding-top: 138%;
-      overflow: hidden;
-      background: var(--bg-deep);
-    }
-
-    .card-img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top center;
-      transition: transform 0.7s var(--ease-out);
-    }
-
-    .card.revealed:hover .card-img { transform: scale(1.05); }
-
-    .card-badge {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      z-index: 3;
-      padding: 0.3rem 0.75rem;
-      border-radius: 30px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--text-strong);
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    .card-fav {
-      position: absolute;
-      top: 0.85rem;
-      right: 0.85rem;
-      z-index: 6;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      color: #b6c2bb;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: var(--transition-spring);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-    .card-fav:hover { transform: scale(1.15); }
-    .card-fav.faved { color: #f26d8d; animation: favPop 0.45s var(--ease-out); }
-    @keyframes favPop {
-      0% { transform: scale(0.6); }
-      55% { transform: scale(1.35); }
-      100% { transform: scale(1); }
-    }
-
-    .card-body {
-      padding: 1.3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      position: relative;
-      z-index: 3;
-      background: var(--card-bg);
-    }
-
-    .card-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
-    .card-name-zh {
-      font-size: 1.28rem;
-      font-weight: 600;
-      color: var(--text-strong);
-    }
-
-    .card-name-en {
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      color: var(--text-faint);
-      letter-spacing: 0.06em;
-    }
-
-    .card-quote {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      font-style: italic;
-      margin-top: 0.2rem;
-      line-height: 1.5;
-    }
-
-    .card-footer {
-      margin-top: 0.7rem;
-      padding-top: 0.7rem;
-      border-top: 1px dashed var(--border-line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-    }
-
-    .card-tag {
-      color: var(--accent);
-      background: var(--accent-soft);
-      padding: 0.15rem 0.55rem;
-      border-radius: 4px;
-    }
-
-    .card-swipe-tip { font-size: 0.7rem; color: var(--text-faint); transition: color 0.3s ease; }
-    .card.revealed:hover .card-swipe-tip { color: var(--accent); }
-
-    /* ================= 沉浸式全屏展厅 ================= */
-    .pavilion {
-      position: fixed;
-      inset: 0;
-      z-index: 400;
-      background: var(--bg-color);
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.96) translateY(30px);
-      transition: var(--transition-spring);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .pavilion.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1) translateY(0);
-    }
-
-    .pavilion-topbar {
-      position: sticky;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      background: linear-gradient(180deg, var(--bg-color) 55%, transparent);
-      padding: 14px 0 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .drag-indicator {
-      width: 48px;
-      height: 5px;
-      background: var(--text-faint);
-      opacity: 0.55;
-      border-radius: 10px;
-      margin-bottom: 4px;
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-    .pavilion-topbar:hover .drag-indicator { background: var(--accent); opacity: 1; transform: scaleX(1.25); }
-
-    .drag-hint-text {
-      font-size: 0.65rem;
-      color: var(--text-faint);
-      letter-spacing: 0.05em;
-    }
-
-    .pavilion-content-wrapper {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0.5rem 1.8rem 5rem 1.8rem;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 3rem;
-      align-items: start;
-      transition: transform 0.2s ease-out, opacity 0.2s ease;
-    }
-
-    .pavilion-visual {
-      position: relative;
-      width: 100%;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-      border: 1px solid var(--border-soft);
-      background: var(--panel-bg);
-      line-height: 0;
-      cursor: zoom-in;
-    }
-
-    .pavilion-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: opacity 0.35s ease, transform 0.5s var(--ease-out);
-    }
-    .pavilion-visual:hover .pavilion-img { transform: scale(1.015); }
-
-    .zoom-tip {
-      position: absolute;
-      bottom: 0.8rem;
-      right: 0.9rem;
-      z-index: 3;
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      color: var(--text-sub);
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(8px);
-      padding: 0.25rem 0.7rem;
-      border-radius: 30px;
-      line-height: 1.6;
-    }
-
-    .pavilion-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .pavilion-header {
-      border-bottom: 1px solid var(--border-line);
-      padding-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-
-    .pavilion-name-zh {
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: var(--text-strong);
-      line-height: 1.2;
-    }
-
-    .pavilion-name-en {
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      margin-top: 0.15rem;
-    }
-
-    .pav-element {
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .pav-element .el-badge {
-      display: inline-block;
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      padding: 0.35rem 0.9rem;
-      border-radius: 30px;
-      color: #fff;
-      box-shadow: 0 6px 18px var(--accent-soft);
-    }
-    .pav-element .el-label {
-      display: block;
-      font-size: 0.62rem;
-      color: var(--text-faint);
-      margin-top: 0.3rem;
-      letter-spacing: 0.1em;
-    }
-
-    /* 声纹呼吸条 */
-    .wave-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--panel-bg);
-      padding: 0.6rem 1rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-soft);
-    }
-
-    .wave-label {
-      font-size: 0.72rem;
-      font-family: 'Cinzel', serif;
-      color: var(--text-sub);
-      white-space: nowrap;
-    }
-
-    #waveCanvas { width: 140px; height: 24px; }
-    .wave-freq { font-size: 0.62rem; color: var(--text-faint); margin-left: auto; letter-spacing: 0.08em; }
-
-    /* 多维信息窗格 */
-    .meta-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.8rem;
-    }
-
-    .meta-window {
-      background: var(--panel-bg);
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--border-soft);
-      transition: var(--transition-spring);
-    }
-    .meta-window:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
-
-    .meta-title {
-      font-size: 0.68rem;
-      font-family: 'Cinzel', serif;
-      letter-spacing: 0.08em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-
-    .meta-val {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    /* 灵魂共鸣数值面板 */
-    .stats-panel {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-soft);
-      border-radius: 14px;
-      padding: 1rem 1.1rem 1.15rem 1.1rem;
-    }
-    .stats-panel h4 {
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .stat-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
-    .stat-row:last-child { margin-bottom: 0; }
-    .stat-name { width: 3.2em; font-size: 0.74rem; color: var(--text-sub); flex-shrink: 0; }
-    .stat-track {
-      flex: 1;
-      height: 6px;
-      background: var(--border-line);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .stat-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--stat-color, var(--accent)), var(--stat-color-light, #a3d9bd));
-      transition: width 0.9s var(--ease-out);
-      box-shadow: 0 0 8px var(--accent-soft);
-    }
-    .stat-num { width: 2.2em; font-size: 0.7rem; color: var(--text-faint); text-align: right; font-variant-numeric: tabular-nums; }
-
-    /* 物语卡片展台 */
-    .story-pavilion {
-      background: var(--panel-bg);
-      padding: 1.4rem 1.4rem 1.4rem 1.7rem;
-      border-radius: 16px;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      font-size: 0.92rem;
-      color: var(--text-main);
-      line-height: 1.9;
-      position: relative;
-    }
-
-    .story-pavilion::before {
-      content: "“";
-      position: absolute;
-      top: -8px;
-      left: 12px;
-      font-size: 3rem;
-      font-family: 'Playfair Display', serif;
-      color: var(--accent);
-      opacity: 0.25;
-      line-height: 1;
-    }
-
-    .gesture-hint-bar {
-      font-size: 0.75rem;
-      color: var(--text-faint);
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0.5rem 0 0.5rem;
-    }
-
-    /* 展厅翻页箭头与指示点 */
-    .pav-arrow {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 20;
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      border: 1px solid var(--border-line);
-      background: var(--panel-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: var(--text-sub);
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition-spring);
-      opacity: 0;
-    }
-    .pavilion.active .pav-arrow { opacity: 1; }
-    .pav-arrow:hover { color: #fff; background: var(--accent); border-color: var(--accent); box-shadow: 0 8px 24px var(--accent-glow); }
-    .pav-arrow.left { left: 1.4rem; }
-    .pav-arrow.right { right: 1.4rem; }
-    @media (max-width: 820px) { .pav-arrow { display: none; } }
-
-    .pav-dots {
-      position: fixed;
-      bottom: 1.4rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      display: flex;
-      gap: 0.5rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .pavilion.active .pav-dots { opacity: 1; }
-    .pav-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      border: none;
-      background: var(--border-line);
-      cursor: pointer;
-      transition: var(--transition-spring);
-      padding: 0;
-    }
-    .pav-dot.active {
-      width: 24px;
-      border-radius: 6px;
-      background: var(--dot-color, var(--accent));
-      box-shadow: 0 0 10px var(--accent-soft);
-    }
-
-    /* ================= 原图放大灯箱 ================= */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 600;
-      background: rgba(5, 10, 8, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-      cursor: zoom-out;
-    }
-    .lightbox.open { opacity: 1; pointer-events: auto; }
-    .lightbox img {
-      max-width: min(92vw, 900px);
-      max-height: 92vh;
-      border-radius: 14px;
-      box-shadow: 0 30px 90px rgba(0,0,0,0.5);
-      transform: scale(0.92);
-      transition: transform 0.4s var(--ease-out);
-    }
-    .lightbox.open img { transform: scale(1); }
-
-    /* ================= Toast 提示 ================= */
-    .toast {
-      position: fixed;
-      bottom: 2.2rem;
-      left: 50%;
-      transform: translate(-50%, 20px);
-      z-index: 700;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 14px 40px rgba(0,0,0,0.12);
-      color: var(--text-main);
-      padding: 0.7rem 1.4rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      opacity: 0;
-      pointer-events: none;
-      transition: var(--transition-spring);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-    .toast .t-ico { color: var(--accent); }
-
-    /* ================= 回到顶部 ================= */
-    .back-top {
-      position: fixed;
-      bottom: 2rem;
-      right: 1.6rem;
-      z-index: 150;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--border-line);
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: var(--accent);
-      font-size: 1rem;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(16px);
-      pointer-events: none;
-      transition: var(--transition-spring);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-    .back-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .back-top:hover { transform: translateY(-4px); box-shadow: 0 12px 28px var(--accent-soft); }
-
-    /* ================= 页脚 ================= */
-    footer {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      padding: 2.5rem 1.5rem 3.2rem 1.5rem;
-      border-top: 1px solid var(--border-line);
-    }
-    .foot-brand {
-      font-family: 'Cinzel', serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.3em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-    .foot-line { font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.06em; }
-    .foot-line span { margin: 0 0.6em; opacity: 0.4; }
-
-    /* ================= 移动端适配 ================= */
-    @media (max-width: 820px) {
-      .pavilion-content-wrapper {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 0.5rem 1.2rem 4.5rem 1.2rem;
-      }
-      .pavilion-name-zh { font-size: 1.75rem; }
-      .pavilion-header { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
-      .pav-element { text-align: left; }
-      .meta-grid { grid-template-columns: 1fr; }
-      header { padding-top: 6rem; }
-      .zoom-tip { display: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f6f8f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080d0b" media="(prefers-color-scheme: dark)">
+<title>AETHERIA · 萌叶幻想物语集 | 虚拟人格艺术绘卷</title>
+<meta name="description" content="AETHERIA 萌叶幻想物语集 —— 幻叶、小叶子、黑白双生与呆呆的虚拟人格艺术绘卷。收录立绘全景、性格档案与物语叙事。">
+<meta property="og:title" content="AETHERIA · 萌叶幻想物语集">
+<meta property="og:description" content="左右滑动切换 · 下滑返回 · 沉浸式虚拟人格艺术展厅">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://picui.ogmua.cn/s1/2026/09/13/6aa6a9fba2fc6.webp">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C24 9 28 15 16 29 4 15 8 9 16 3Z' fill='%2348725e'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<noscript><style>.reveal{opacity:1;translate:none}.preloader{display:none}</style></noscript>
 </head>
-<body data-page-node-id="n40Oo19DodGaLCKcZdVu3k">
+<body>
 
-  <!-- 预加载启动屏 -->
-  <div id="preloader" data-page-node-id="XVZs611yHUgLfV3g3WAOwU">
-    <svg class="pre-leaf" viewBox="0 0 24 24" fill="none" stroke="#48725e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="7eHFw0fIta9OKzAEsL43zj">
-      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" data-page-node-id="9oxst3b2A0fLnOMp3vFjnV"/>
-      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" data-page-node-id="jCnqcrnsr9kOssapoQzIDc"/>
-    </svg>
-    <div class="pre-word" id="preWord" data-page-node-id="0x0NI8aWpWnpawSUe6x80U"></div>
-    <div class="pre-bar" data-page-node-id="NbZzxkmBqDSazCbb7OpTYA"><i id="preBarFill" data-page-node-id="iSjJZ1FUN8ZzGcFbspAAjt"></i></div>
-    <div class="pre-sub" data-page-node-id="tgzvIY5wE9Jj6F5zYEFDjF">正在唤醒叶语世界…</div>
-  </div>
-
-  <!-- 滚动进度条 -->
-  <div id="scrollProgress" data-page-node-id="CXXGqmjYb9XSJATiBVgvC3"></div>
-
-  <!-- 空间粒子引擎画布 -->
-  <canvas id="ambientCanvas" data-page-node-id="OyUQIRiXdFtO8L3rqDoXLz"></canvas>
-
-  <!-- 微光渐变层 -->
-  <div class="ambient-aurora" id="ambientAurora" data-page-node-id="nRaLPdHWn8KzM8X2HB3m6N"></div>
-
-  <!-- 噪点颗粒层 -->
-  <div class="grain" data-page-node-id="flHyNK8BP6hXa4TK4R2sBr"></div>
-
-  <!-- 自定义光标 -->
-  <div class="cursor-dot" id="cursorDot" data-page-node-id="dlWyJCKkXkmJm4GSP7tip4"></div>
-  <div class="cursor-ring" id="cursorRing" data-page-node-id="ZzI9YRlqtNc40ZtKlFzpxo"></div>
-
-  <!-- 顶部导航 -->
-  <nav class="nav" id="nav" data-page-node-id="n7ao7VIVVqrmeGT7OsE8V7">
-    <div class="nav-brand" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="wjHPjX6lC27OesWImTgUII">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="waCaq7mqKK7piOf6GJBbAQ">
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" data-page-node-id="bIHPAEQ95KKriU7cO7myuc"/>
-        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" data-page-node-id="DVjT6f8e0i4GAceQivqjRp"/>
+<!-- ══════════ 启动幕 ══════════ -->
+<div class="preloader" id="preloader" role="status" aria-live="polite">
+  <div class="pre-inner">
+    <div class="pre-mark">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--accent)"/>
+            <stop offset="100%" stop-color="var(--accent-2)"/>
+          </linearGradient>
+        </defs>
+        <path class="leaf-path" d="M32 6 C 46 18, 54 30, 32 58 C 10 30, 18 18, 32 6 Z" fill="none" stroke="url(#leafGrad)" stroke-width="1.6" stroke-linecap="round"/>
+        <path class="leaf-vein" d="M32 12 L32 54 M32 26 L42 20 M32 36 L40 32 M32 26 L22 20 M32 36 L24 32" fill="none" stroke="url(#leafGrad)" stroke-width="1.1" stroke-linecap="round" opacity=".65"/>
       </svg>
-      AETHERIA
     </div>
-    <div class="nav-actions" data-page-node-id="6cCS10Hm8YQhaai0cBdxuw">
-      <button class="icon-btn" id="favFilterBtn" title="只看收藏" onclick="toggleFavFilter()" data-page-node-id="Wv7EP6f35RhxH4BRquT5ex">♡</button>
-      <button class="icon-btn" id="soundBtn" title="氛围音" onclick="toggleAmbient()" data-page-node-id="2t17jc5KSNPpag0hFr8EIX">♪</button>
-      <button class="icon-btn" id="themeBtn" title="切换主题" onclick="toggleTheme()" data-page-node-id="pLTE6B0IH34qD5sFrbEfgQ">☾</button>
-    </div>
+    <div class="pre-word">AETHERIA</div>
+    <div class="pre-bar"><span id="preBar"></span></div>
+    <div class="pre-pct"><span id="prePct">0</span>% · 正在唤醒绘卷</div>
+  </div>
+</div>
+
+<!-- ══════════ 背景环境层 ══════════ -->
+<div class="ambient" aria-hidden="true">
+  <div class="aurora aurora-a" data-depth="14"></div>
+  <div class="aurora aurora-b" data-depth="26"></div>
+  <div class="aurora aurora-c" data-depth="40"></div>
+  <div class="grain"></div>
+  <canvas id="stardust"></canvas>
+</div>
+
+<!-- ══════════ 自定义光标 ══════════ -->
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span id="cursorLabel"></span></div>
+
+<!-- ══════════ 滚动进度 ══════════ -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- ══════════ 导航 ══════════ -->
+<header class="nav" id="nav">
+  <a class="nav-brand" href="#top" aria-label="返回顶部">
+    <svg class="brand-leaf" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 3 C 24 9, 28 15, 16 29 C 4 15, 8 9, 16 3 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-text">AETHERIA</span>
+  </a>
+
+  <nav class="nav-links" aria-label="主导航">
+    <a href="#gallery" class="nav-link">绘卷<span>Gallery</span></a>
+    <a href="#chronicle" class="nav-link">编年<span>Chronicle</span></a>
+    <a href="#archive" class="nav-link">档案<span>Archive</span></a>
   </nav>
 
-  <!-- 头部介绍 -->
-  <header data-page-node-id="oGtvgdEE1CfuRaT2M1KPaA">
-    <div class="brand-eyebrow" data-page-node-id="6rkJErp1TpL4Q2AMscUcf0">Virtual Persona / Fine Art Showcase</div>
-    <h1 class="brand-title" data-page-node-id="m4r47xbfg4cZATnUM3jChB">萌叶幻想物语</h1>
-    <p class="brand-desc" data-page-node-id="anNuxgHGkvGzVG2CT3aZxA">huanye-xiaoyezi / <b data-page-node-id="NEAUMiL6nWN91lGWNIMTdn">左右滑动</b>切换 · <b data-page-node-id="DlzSWgcwE0s9qvonhois2Z">下拉</b>返回 · 点击卡片开启角色物语</p>
-  </header>
+  <div class="nav-tools">
+    <button class="icon-btn" id="soundToggle" aria-pressed="false" aria-label="开启环境音" title="环境音 (S)">
+      <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" aria-label="切换深色模式" title="主题 (T)">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></g></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.6 8.6 0 1 0 10.2 10.2Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
 
-  <!-- 筛选工具条 -->
-  <div class="filter-bar" id="filterBar" data-page-node-id="F3RpH1AhXJtTKaIeEXfhXJ"></div>
+<main id="top">
 
-  <!-- 角色画廊主网格 -->
-  <main class="gallery-grid" id="galleryGrid" data-page-node-id="QcASDiwzeJqo8luCmprItG"></main>
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero">
+    <div class="hero-glow" data-depth="60" aria-hidden="true"></div>
 
-  <!-- 页脚 -->
-  <footer data-page-node-id="zMwQeNRO8A7DmpKpJXGs4t">
-    <div class="foot-brand" data-page-node-id="mOrhgjAinmm8JUVEAHECRT">AETHERIA · MENG YE</div>
-    <p class="foot-line" data-page-node-id="2gb9G1DBXE6sh8I7tCjjg8">萌叶幻想物语集<span data-page-node-id="4X9ipzKw9uD9RSWtACWubu">·</span>以叶为信<span data-page-node-id="XAyjBqNUKMIKOv8rBDgNcC">·</span>以风为约<span data-page-node-id="AvTxxAuymnF8KSmrX8rvgO">·</span>MMXXVI</p>
-  </footer>
-
-  <!-- 沉浸式全屏展厅 -->
-  <section class="pavilion" id="pavilion" data-page-node-id="SFaZK7bvAXluGTaALq9vnL">
-    <div class="pavilion-topbar" id="pavilionTopbar" onclick="closePavilion()" data-page-node-id="8BEoFvYMR5Q0WKXSxJ8ZwG">
-      <div class="drag-indicator" data-page-node-id="9AA6CmkDVrCTCy6TCrhFzd"></div>
-      <span class="drag-hint-text" data-page-node-id="LRG9D1hRJ9GeW0TA3cGned">向下拉动或轻触此处返回画廊</span>
-    </div>
-
-    <div class="pavilion-content-wrapper" id="pavilionContent" data-page-node-id="tDvyDnW78QULvTQ6ZBxmqv">
-      <div class="pavilion-visual" onclick="openLightbox()" data-page-node-id="D1WpAQECtsWSs8HbLbDlBU">
-        <img class="pavilion-img" id="pavilionImg" src="" alt="立绘全景" data-page-node-id="ME68QQ2mF2cgYT7BEBmW4Z" />
-        <span class="zoom-tip" data-page-node-id="XtllPM7vNyjVHGchW5UGu8">⤢ 点击查看原图</span>
+    <div class="hero-copy">
+      <div class="eyebrow reveal" data-delay="0">
+        <span class="eyebrow-dot"></span>
+        Virtual Persona · Fine Art Showcase
       </div>
 
-      <div class="pavilion-info" data-page-node-id="AgVEHJPeSWcQOmSppk94ow">
-        <div class="pavilion-header" data-page-node-id="oW5HaLsI6jZTUSnPmaA9LA">
-          <div data-page-node-id="5QMu8vZEViXihF45E553Tw">
-            <div class="pavilion-name-zh" id="pavilionNameZh" data-page-node-id="5Fd1Gf30SB1lN3c2X3zmbp"></div>
-            <div class="pavilion-name-en" id="pavilionNameEn" data-page-node-id="Q3A77qGkDQiIvW0mxAcYgD"></div>
-          </div>
-          <div class="pav-element" data-page-node-id="MMKuKFWPHBuAjNdExADLUk">
-            <span class="el-badge" id="pavElementBadge" data-page-node-id="ikbYa34kKHh5yAitfGfObk"></span>
-            <span class="el-label" data-page-node-id="lZhpsCJK5ZwCq2uV7XXRNw">Element / 属性</span>
-          </div>
-        </div>
+      <h1 class="hero-title reveal" data-delay="1">
+        <span class="title-line title-en">AETHERIA</span>
+        <span class="title-line title-zh">萌叶幻想物语</span>
+      </h1>
 
-        <div class="wave-container" data-page-node-id="RzHGMzNtnTijnlenYxP7BJ">
-          <span class="wave-label" data-page-node-id="mcwI4ZA7MvTJvpgZj5l7vr">Resonance / 共鸣波形</span>
-          <canvas id="waveCanvas" data-page-node-id="hduPvRAJFDOg0idCrSg1hW"></canvas>
-          <span class="wave-freq" id="waveFreq" data-page-node-id="vcEjQX7Ox7EtTlpcjON44z"></span>
-        </div>
+      <p class="hero-sub reveal" data-delay="2">
+        四片叶子落在同一阵风里 —— 她们是晨雾、是碧水、是黑白相依的呼吸，<br>
+        也是那个总在发呆、却依然想去看世界的孩子。
+      </p>
 
-        <div class="meta-grid" data-page-node-id="Df2pkKi09wjq6R2r7bBC0Y">
-          <div class="meta-window" data-page-node-id="ZqDNSUYqA4rnehISwdfhqG">
-            <div class="meta-title" data-page-node-id="b4rVqpLobYdgUs4PuQClPS">Personality / 性格特质</div>
-            <div class="meta-val" id="metaPersonality" data-page-node-id="OJyBZzGjj0Y7vzEU0209KL"></div>
-          </div>
-          <div class="meta-window" data-page-node-id="t4aB4riRJ12DUIdPLovIhg">
-            <div class="meta-title" data-page-node-id="gjAaSFbB0KFl5alj7N4cGO">Constellation / 诞生印记</div>
-            <div class="meta-val" id="metaBirthday" data-page-node-id="BAWJr0xgLnZ8un3L7fErgm"></div>
-          </div>
-        </div>
-
-        <div class="stats-panel" id="statsPanel" data-page-node-id="VBEQYYAyqnkPVkJzo4lqDf">
-          <h4 data-page-node-id="mxeCcAfdnwz474nLy1kZaB">Soul Resonance / 灵魂共鸣</h4>
-          <div id="statsRows" data-page-node-id="ZKSUXfUlsMIFzWbRAr2PFZ"></div>
-        </div>
-
-        <div class="story-pavilion" id="pavilionStory" data-page-node-id="zdb1SkoE4vbAezIA2BvUm5"></div>
-
-        <div class="gesture-hint-bar" data-page-node-id="lAPjy6mOad3Z1jYh3nSweb">
-          <span data-page-node-id="2WsHpUhtNVibEJYEf12bD1">⟵ 轻扫切换上一位</span>
-          <span data-page-node-id="iTy2B6nfouTQmzWV6uN8v8">轻扫切换下一位 ⟶</span>
-        </div>
+      <div class="hero-actions reveal" data-delay="3">
+        <a href="#gallery" class="btn btn-primary">
+          <span>展开绘卷</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5.5 18.5 12 12 18.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="btn btn-ghost" id="surpriseBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+          <span>随机相遇</span>
+        </button>
       </div>
+
+      <dl class="hero-stats reveal" data-delay="4">
+        <div class="stat"><dt>人格</dt><dd><span class="num" data-count="4">0</span></dd></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><dt>物语章节</dt><dd><span class="num" data-count="12">0</span></dd></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><dt>绘卷编号</dt><dd class="mono">AE—04</dd></div>
+      </dl>
     </div>
 
-    <button class="pav-arrow left" onclick="event.stopPropagation(); prevCharacter()" aria-label="上一位" data-page-node-id="Q312KDEn1SV0h6eKctuROl">⟵</button>
-    <button class="pav-arrow right" onclick="event.stopPropagation(); nextCharacter()" aria-label="下一位" data-page-node-id="7FPbcZiaDq33HyJp8BiW19">⟶</button>
-    <div class="pav-dots" id="pavDots" data-page-node-id="c3RgdZWUlQYCQgsNkkdVG1"></div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="cue-text">向下滚动</span>
+      <span class="cue-line"></span>
+    </div>
   </section>
 
-  <!-- 原图灯箱 -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()" data-page-node-id="Yp1B0oGg3K9053UZxsoQbS">
-    <img id="lightboxImg" src="" alt="立绘原图" data-page-node-id="HtsvHCbtv9S1QoeZlEbArk" />
+  <!-- ══════════ 画廊 ══════════ -->
+  <section class="section" id="gallery">
+    <div class="section-head reveal">
+      <div class="sec-index mono">01</div>
+      <div>
+        <h2 class="sec-title">绘卷 · 人格群像</h2>
+        <p class="sec-desc">轻触卡片进入沉浸式展厅；展厅内左右滑动切换，向下拉动返回。</p>
+      </div>
+    </div>
+
+    <div class="filters reveal" role="tablist" aria-label="人格筛选" id="filters"></div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <!-- ══════════ 编年史 ══════════ -->
+  <section class="section" id="chronicle">
+    <div class="section-head reveal">
+      <div class="sec-index mono">02</div>
+      <div>
+        <h2 class="sec-title">编年 · 世界之叶</h2>
+        <p class="sec-desc">AETHERIA 是一片以落叶计时的世界，每一片叶子都记得一次相遇。</p>
+      </div>
+    </div>
+
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <!-- ══════════ 档案 ══════════ -->
+  <section class="section" id="archive">
+    <div class="section-head reveal">
+      <div class="sec-index mono">03</div>
+      <div>
+        <h2 class="sec-title">档案 · 观察手记</h2>
+        <p class="sec-desc">关于这个世界的一些可被记录的细节。</p>
+      </div>
+    </div>
+
+    <div class="archive-grid" id="archiveGrid"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">AETHERIA</span>
+      <p>萌叶幻想物语集 · 虚拟人格艺术绘卷</p>
+    </div>
+    <div class="footer-meta mono">
+      <span>huanye-xiaoyezi</span>
+      <span>·</span>
+      <span id="yearSpan">2026</span>
+    </div>
+    <button class="to-top" id="toTop" aria-label="返回顶部">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M5.5 12.5 12 6l6.5 6.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</footer>
+
+<!-- ══════════ 沉浸式展厅 ══════════ -->
+<section class="pavilion" id="pavilion" role="dialog" aria-modal="true" aria-label="角色展厅" aria-hidden="true">
+  <div class="pav-topbar" id="pavTopbar">
+    <button class="pav-close" id="pavClose" aria-label="关闭展厅">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="pav-drag" id="pavDrag">
+      <span class="drag-indicator" id="dragIndicator"></span>
+      <span class="drag-hint" id="dragHint">向下拉动返回画廊</span>
+    </div>
+    <div class="pav-counter mono" id="pavCounter">01 / 04</div>
   </div>
 
-  <!-- Toast -->
-  <div class="toast" id="toast" data-page-node-id="7j2oym23NvgIbJIIxCSuyV"><span class="t-ico" data-page-node-id="iiBu1OKCctd2nH2DHlyOSV">✦</span><span id="toastText" data-page-node-id="GPYrlpth3SiuskFQyC1FAe"></span></div>
+  <div class="pav-body" id="pavBody">
+    <div class="pav-shift" id="pavShift">
 
-  <!-- 回到顶部 -->
-  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部" data-page-node-id="PSfgwNnprwoK3vZsfPLt72">↑</button>
-
-  <script>
-    /* ==========================================================================
-       1. 角色数据集与高清原图外链
-       ========================================================================== */
-    const galleryItems = [
-      {
-        id: "haanye",
-        nameZh: "幻叶",
-        nameEn: "Haanye",
-        tag: "Green Leaf Dream",
-        element: "风之律",
-        personality: "活泼 / 开朗 / 温柔",
-        birthday: "11月23日 · 初春之叶",
-        quote: "像风一样，把快乐吹进每一片叶子里。",
-        story: "幻叶诞生于初春嫩芽萌发的瞬间，身着荧光嫩绿的潮流外套。她热爱踏着晨曦露水漫游在各地森林，把收集落叶作为独一无二的宝物。那双清澈的眼睛闪烁着自然的生机，把风的温度带给旅途中的每个人。",
-        image: "https://picui.ogmua.cn/s1/2026/09/13/6aa6a9fba2fc6.webp",
-        toneFreq: 523.25,
-        color: "#4a8c6a",
-        colorLight: "#9fd8b6",
-        stats: { "活力": 90, "温柔": 75, "灵感": 82, "幸运": 88 }
-      },
-      {
-        id: "xiaoyezi",
-        nameZh: "小叶子",
-        nameEn: "Xiaoyezi",
-        tag: "Pure Natural",
-        element: "水之镜",
-        personality: "温柔 / 腼腆 / 细腻",
-        birthday: "10月12日 · 碧水微澜",
-        quote: "一片叶子，一份温柔。很高兴认识你~",
-        story: "小叶子宛如春日微风拂落的柔光。坐在石栏旁的她总是安静翻阅着画册，青翠长发旁缀着两片嫩芽发饰。她虽然不善张扬言语，却能用最纯净的目光与无声陪伴，治愈每一个平凡疲惫的日常。",
-        image: "https://picui.ogmua.cn/s1/2026/09/13/6aa6acb082068.webp",
-        toneFreq: 587.33,
-        color: "#5b8fb0",
-        colorLight: "#a9d3ea",
-        stats: { "活力": 60, "温柔": 95, "灵感": 88, "幸运": 70 }
-      },
-      {
-        id: "twins",
-        nameZh: "小白 & 小黑",
-        nameEn: "Little Black & White",
-        tag: "Two Souls, One World",
-        element: "光之约",
-        personality: "小白(软萌傲娇) · 小黑(活泼粘人)",
-        birthday: "双生同栖 · 永恒晨曦",
-        quote: "有你在的地方，就是最温暖的角落 ♡",
-        story: "依偎在暖阳里的猫耳双生少女。戴着十字发夹的白猫小白略带害羞，黑猫小黑则总是开心地紧紧环抱对方。黑白相依，是彼此无可替代的纯洁羁绊，在安静的角落构筑起最坚实的避风港。",
-        image: "https://picui.ogmua.cn/s1/2026/09/13/6aa6ae2bbc8c3.webp",
-        toneFreq: 659.25,
-        color: "#a67fb8",
-        colorLight: "#dcc4e8",
-        stats: { "活力": 78, "温柔": 85, "灵感": 76, "幸运": 92 }
-      },
-      {
-        id: "daidai",
-        nameZh: "呆呆",
-        nameEn: "Daidai",
-        tag: "Big Dreamer",
-        element: "星之愿",
-        personality: "天真 / 呆萌 / 温柔",
-        birthday: "猫尾星纪 · 晴空倒影",
-        quote: "虽然有点呆，但我一直都在努力变可爱！",
-        story: "拥有一头如澄澈海浪般微卷蓝发的猫尾女孩呆呆。戴着宽大的魔法兜帽，脚踩厚底运动鞋坐在水镜倒影中。她是一个很普通但又无比特别的小小存在，时刻期待着与你一同出发去看更大的世界。",
-        image: "https://picui.ogmua.cn/s1/2026/09/13/6aa6ad2c1965f.webp",
-        toneFreq: 783.99,
-        color: "#4f7ecb",
-        colorLight: "#a9c6f0",
-        stats: { "活力": 85, "温柔": 80, "灵感": 94, "幸运": 65 }
-      }
-    ];
-
-    // 图片预加载（带进度反馈）
-    let loadedCount = 0;
-    galleryItems.forEach(item => {
-      const img = new Image();
-      img.onload = img.onerror = () => {
-        loadedCount++;
-        const p = Math.round(loadedCount / galleryItems.length * 100);
-        document.getElementById('preBarFill').style.width = p + '%';
-        if (loadedCount >= galleryItems.length) setTimeout(hidePreloader, 350);
-      };
-      img.src = item.image;
-    });
-    // 兜底：网络异常时也保证进入
-    setTimeout(hidePreloader, 6000);
-
-    function hidePreloader() {
-      const pre = document.getElementById('preloader');
-      if (pre.classList.contains('done')) return;
-      pre.classList.add('done');
-    }
-
-    // 品牌字逐字浮现
-    (function () {
-      const w = document.getElementById('preWord');
-      'AETHERIA'.split('').forEach((ch, i) => {
-        const s = document.createElement('span');
-        s.textContent = ch;
-        s.style.setProperty('--i', i);
-        w.appendChild(s);
-      });
-    })();
-
-    let currentPavilionIdx = 0;
-    let isPavilionOpen = false;
-    let favOnly = false;
-
-    /* ==========================================================================
-       2. 主题系统（持久化）
-       ========================================================================== */
-    const themeBtn = document.getElementById('themeBtn');
-    function applyTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      themeBtn.textContent = t === 'dark' ? '☀' : '☾';
-      try { localStorage.setItem('aetheria-theme', t); } catch (e) {}
-    }
-    function toggleTheme() {
-      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-      playTone(next === 'dark' ? 392 : 659.25, 0.14);
-    }
-    (function initTheme() {
-      let saved = null;
-      try { saved = localStorage.getItem('aetheria-theme'); } catch (e) {}
-      if (!saved) saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      applyTheme(saved);
-    })();
-
-    /* ==========================================================================
-       3. 静默 Web Audio 合成引擎（音效 + 氛围音）
-       ========================================================================== */
-    let audioCtx = null;
-    function ensureAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    function playTone(freq, dur = 0.16) {
-      if (!audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + dur);
-      } catch (e) {}
-    }
-
-    // 氛围音：双振荡器微失谐 + 缓慢呼吸包络
-    let ambientOn = false;
-    let ambientNodes = null;
-    const soundBtn = document.getElementById('soundBtn');
-
-    function toggleAmbient() {
-      ensureAudioContext();
-      if (!ambientOn) {
-        try {
-          const master = audioCtx.createGain();
-          master.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-          master.gain.exponentialRampToValueAtTime(0.035, audioCtx.currentTime + 2.2);
-
-          const o1 = audioCtx.createOscillator();
-          const o2 = audioCtx.createOscillator();
-          o1.type = 'sine'; o2.type = 'sine';
-          o1.frequency.value = 261.63; // C4
-          o2.frequency.value = 392.00; // G4，微失谐形成波荡
-          o2.detune.value = 5;
-
-          const lfo = audioCtx.createOscillator();
-          const lfoGain = audioCtx.createGain();
-          lfo.frequency.value = 0.12;
-          lfoGain.gain.value = 0.015;
-          lfo.connect(lfoGain);
-          lfoGain.connect(master.gain);
-
-          o1.connect(master); o2.connect(master);
-          master.connect(audioCtx.destination);
-          o1.start(); o2.start(); lfo.start();
-
-          ambientNodes = { master, o1, o2, lfo };
-          ambientOn = true;
-          soundBtn.classList.add('active');
-          showToast('氛围音 · 已开启');
-        } catch (e) {}
-      } else {
-        try {
-          ambientNodes.master.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
-          setTimeout(() => {
-            try { ambientNodes.o1.stop(); ambientNodes.o2.stop(); ambientNodes.lfo.stop(); } catch (e) {}
-          }, 900);
-        } catch (e) {}
-        ambientNodes = null;
-        ambientOn = false;
-        soundBtn.classList.remove('active');
-        showToast('氛围音 · 已关闭');
-      }
-    }
-
-    function vibrate(pattern = [12]) {
-      if ('vibrate' in navigator) navigator.vibrate(pattern);
-    }
-
-    /* ==========================================================================
-       4. 动态波形可视化（随角色色彩变化）
-       ========================================================================== */
-    const waveCanvas = document.getElementById('waveCanvas');
-    const waveCtx = waveCanvas.getContext('2d');
-    let waveStep = 0;
-    let waveColor = '#48725e';
-
-    function renderWaveform() {
-      waveCtx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
-      waveCtx.beginPath();
-      waveCtx.lineWidth = 2;
-      waveCtx.strokeStyle = waveColor;
-
-      for (let x = 0; x < waveCanvas.width; x++) {
-        const y = waveCanvas.height / 2 + Math.sin((x * 0.08) + waveStep) * 6;
-        if (x === 0) waveCtx.moveTo(x, y);
-        else waveCtx.lineTo(x, y);
-      }
-      waveCtx.stroke();
-      waveStep += 0.08;
-      requestAnimationFrame(renderWaveform);
-    }
-    renderWaveform();
-
-    /* ==========================================================================
-       5. 收藏系统（localStorage 持久化）
-       ========================================================================== */
-    let favs = [];
-    try { favs = JSON.parse(localStorage.getItem('aetheria-favs') || '[]'); } catch (e) { favs = []; }
-
-    function isFav(id) { return favs.includes(id); }
-
-    function toggleFav(id, e) {
-      if (e) { e.stopPropagation(); }
-      const idx = favs.indexOf(id);
-      const item = galleryItems.find(g => g.id === id);
-      if (idx >= 0) {
-        favs.splice(idx, 1);
-        showToast('已取消收藏 ' + item.nameZh);
-      } else {
-        favs.push(id);
-        showToast('已收藏 ' + item.nameZh + ' ♡');
-        playTone(880, 0.12);
-      }
-      try { localStorage.setItem('aetheria-favs', JSON.stringify(favs)); } catch (e2) {}
-      vibrate([8]);
-      renderCards();
-      renderFilterBar();
-    }
-
-    function toggleFavFilter() {
-      favOnly = !favOnly;
-      document.getElementById('favFilterBtn').classList.toggle('active', favOnly);
-      document.getElementById('favFilterBtn').textContent = favOnly ? '♥' : '♡';
-      if (favOnly && favs.length === 0) showToast('还没有收藏任何角色哦');
-      renderCards();
-      renderFilterBar();
-    }
-
-    /* ==========================================================================
-       6. 筛选工具条
-       ========================================================================== */
-    let activeFilter = 'all';
-    const filterBar = document.getElementById('filterBar');
-
-    function renderFilterBar() {
-      const tags = ['all', ...new Set(galleryItems.map(i => i.tag))];
-      const list = favOnly ? galleryItems.filter(i => isFav(i.id)) : galleryItems;
-      filterBar.innerHTML = tags.map(t => {
-        const cnt = t === 'all' ? list.length : list.filter(i => i.tag === t).length;
-        const label = t === 'all' ? '全部' : t;
-        return `<button class="chip ${activeFilter === t ? 'active' : ''}" onclick="setFilter('${t}')">${label}<span class="cnt">${cnt}</span></button>`;
-      }).join('');
-    }
-
-    function setFilter(t) {
-      activeFilter = t;
-      renderFilterBar();
-      renderCards();
-      playTone(440, 0.1);
-    }
-
-    /* ==========================================================================
-       7. 渲染画廊卡片（含交错入场动画）
-       ========================================================================== */
-    const galleryGrid = document.getElementById('galleryGrid');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          en.target.classList.add('revealed');
-          io.unobserve(en.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    function renderCards() {
-      const list = favOnly ? galleryItems.filter(i => isFav(i.id)) : galleryItems;
-      const visible = list.filter(i => activeFilter === 'all' || i.tag === activeFilter);
-
-      if (visible.length === 0) {
-        galleryGrid.innerHTML = `<div class="gallery-empty">✦ 这里空空如也，换个条件试试吧 ✦</div>`;
-        return;
-      }
-
-      galleryGrid.innerHTML = visible.map((item, idx) => {
-        const realIdx = galleryItems.indexOf(item);
-        return `
-        <article class="card" data-index="${realIdx}" style="transition-delay:${(idx % 4) * 0.09}s"
-          onclick="openPavilion(${realIdx})"
-          onmousemove="onCardMouseMove(event, this)" onmouseleave="onCardMouseLeave(this)">
-          <div class="card-foil"></div>
-          <div class="card-glare"></div>
-          <div class="card-media">
-            <span class="card-badge">${item.tag}</span>
-            <button class="card-fav ${isFav(item.id) ? 'faved' : ''}" onclick="toggleFav('${item.id}', event)" aria-label="收藏">${isFav(item.id) ? '♥' : '♡'}</button>
-            <img class="card-img" src="${item.image}" alt="${item.nameZh}" loading="lazy" />
-          </div>
-          <div class="card-body">
-            <div class="card-header-row">
-              <span class="card-name-zh">${item.nameZh}</span>
-              <span class="card-name-en">${item.nameEn}</span>
-            </div>
-            <p class="card-quote">“${item.quote}”</p>
-            <div class="card-footer">
-              <span class="card-tag">${item.personality.split('/')[0].split('·')[0].trim()}</span>
-              <span class="card-swipe-tip">展开物语 ➔</span>
-            </div>
-          </div>
-        </article>`;
-      }).join('');
-
-      galleryGrid.querySelectorAll('.card').forEach(c => io.observe(c));
-    }
-
-    /* PC 端 3D 棱镜光 */
-    function onCardMouseMove(e, card) {
-      if (window.innerWidth <= 768) return;
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = (-(y - centerY) / centerY) * 12;
-      const rotateY = ((x - centerX) / centerX) * 12;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-
-      const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
-      card.style.setProperty('--foil-angle', `${angle}deg`);
-      card.style.setProperty('--foil-x', `${(x / rect.width) * 100}%`);
-      card.style.setProperty('--foil-y', `${(y / rect.height) * 100}%`);
-      card.style.setProperty('--foil-opacity', '0.7');
-    }
-
-    function onCardMouseLeave(card) {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-      card.style.setProperty('--foil-opacity', '0');
-    }
-
-    /* ==========================================================================
-       8. 手机传感器静默驱动（陀螺仪高反光 + 摇一摇）
-       ========================================================================== */
-    let sensorInitiated = false;
-
-    function initSensorsSilently() {
-      if (sensorInitiated) return;
-      ensureAudioContext();
-
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        DeviceOrientationEvent.requestPermission().then(res => {
-          if (res === 'granted') bindSensors();
-        }).catch(() => {});
-      } else {
-        bindSensors();
-      }
-      sensorInitiated = true;
-    }
-
-    function bindSensors() {
-      window.addEventListener('deviceorientation', (e) => {
-        const gamma = e.gamma || 0;
-        const beta = e.beta || 0;
-
-        const aurora = document.getElementById('ambientAurora');
-        aurora.style.transform = `translate(${gamma * 1.5}px, ${(beta - 45) * 1.5}px)`;
-
-        const reflectionAngle = (gamma * 2 + beta * 2 + 180) % 360;
-        const glareX = Math.min(Math.max((gamma + 30) / 60 * 100, 0), 100);
-        const glareY = Math.min(Math.max((beta - 20) / 50 * 100, 0), 100);
-
-        document.documentElement.style.setProperty('--foil-angle', `${reflectionAngle}deg`);
-        document.documentElement.style.setProperty('--foil-x', `${glareX}%`);
-        document.documentElement.style.setProperty('--foil-y', `${glareY}%`);
-        document.documentElement.style.setProperty('--foil-opacity', '0.6');
-
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(c => {
-          c.style.transform = `perspective(1000px) rotateY(${gamma * 0.25}deg) rotateX(${-(beta - 45) * 0.25}deg)`;
-        });
-      }, { passive: true });
-
-      let lastX = 0, lastY = 0, lastZ = 0, lastTime = 0;
-      window.addEventListener('devicemotion', (e) => {
-        const now = Date.now();
-        if (now - lastTime < 120) return;
-
-        const acc = e.accelerationIncludingGravity;
-        if (!acc) return;
-
-        const delta = Math.abs(acc.x - lastX) + Math.abs(acc.y - lastY) + Math.abs(acc.z - lastZ);
-        if (delta > 28) {
-          lastTime = now;
-          vibrate([30, 50, 30]);
-          const pool = favOnly && favs.length ? galleryItems.map((g, i) => isFav(g.id) ? i : -1).filter(i => i >= 0) : galleryItems.map((_, i) => i);
-          const randomIdx = pool[Math.floor(Math.random() * pool.length)];
-          openPavilion(randomIdx);
-        }
-        lastX = acc.x; lastY = acc.y; lastZ = acc.z;
-      }, { passive: true });
-    }
-
-    window.addEventListener('touchstart', initSensorsSilently, { once: true });
-    window.addEventListener('click', initSensorsSilently, { once: true });
-
-    /* ==========================================================================
-       9. 沉浸式展厅：打开 / 关闭 / 数据渲染 / 灯箱
-       ========================================================================== */
-    const pavilion = document.getElementById('pavilion');
-    const pavilionContent = document.getElementById('pavilionContent');
-    const pavilionImg = document.getElementById('pavilionImg');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const pavDots = document.getElementById('pavDots');
-
-    function renderDots() {
-      pavDots.innerHTML = galleryItems.map((g, i) =>
-        `<button class="pav-dot ${i === currentPavilionIdx ? 'active' : ''}" style="--dot-color:${g.color}" onclick="event.stopPropagation(); jumpToCharacter(${i})" aria-label="${g.nameZh}"></button>`
-      ).join('');
-    }
-
-    function openPavilion(idx) {
-      currentPavilionIdx = idx;
-      updatePavilionData();
-      pavilion.classList.add('active');
-      pavilion.scrollTop = 0;
-      isPavilionOpen = true;
-      document.body.style.overflow = 'hidden';
-
-      const item = galleryItems[idx];
-      playTone(item.toneFreq, 0.25);
-      vibrate([15]);
-    }
-
-    function closePavilion() {
-      pavilion.classList.remove('active');
-      isPavilionOpen = false;
-      document.body.style.overflow = '';
-      vibrate([10]);
-    }
-
-    function updatePavilionData() {
-      const data = galleryItems[currentPavilionIdx];
-      const accent = data.color;
-
-      // 角色专属色彩注入
-      waveColor = accent;
-      document.getElementById('pavilionNameEn').style.color = accent;
-      document.getElementById('pavElementBadge').textContent = data.element;
-      document.getElementById('pavElementBadge').style.background = accent;
-      document.getElementById('waveFreq').textContent = Math.round(data.toneFreq) + ' Hz';
-
-      // 立绘淡切
-      pavilionImg.style.opacity = '0.3';
-      setTimeout(() => {
-        pavilionImg.src = data.image;
-        pavilionImg.onload = () => { pavilionImg.style.opacity = '1'; };
-      }, 100);
-
-      document.getElementById('pavilionNameZh').innerText = data.nameZh;
-      document.getElementById('pavilionNameEn').innerText = data.nameEn;
-      document.getElementById('metaPersonality').innerText = data.personality;
-      document.getElementById('metaBirthday').innerText = data.birthday;
-      document.getElementById('pavilionStory').innerText = data.story;
-
-      // 灵魂共鸣数值条（延迟触发生长动画）
-      const rows = document.getElementById('statsRows');
-      rows.innerHTML = Object.entries(data.stats).map(([k, v]) => `
-        <div class="stat-row">
-          <span class="stat-name">${k}</span>
-          <span class="stat-track">
-            <i class="stat-fill" style="--stat-color:${accent};--stat-color-light:${data.colorLight};width:0%"></i>
-          </span>
-          <span class="stat-num">${v}</span>
+      <figure class="pav-visual" id="pavVisual">
+        <div class="pav-frame">
+          <img class="pav-img" id="pavImg" alt="角色立绘全景" draggable="false">
+          <div class="pav-img-shade" aria-hidden="true"></div>
+          <button class="pav-zoom" id="pavZoom" aria-label="放大查看">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+          </button>
         </div>
-      `).join('');
-      setTimeout(() => {
-        rows.querySelectorAll('.stat-fill').forEach((f, i) => {
-          setTimeout(() => { f.style.width = Object.values(data.stats)[i] + '%'; }, 60);
-        });
-      }, 80);
+        <figcaption class="pav-caption mono" id="pavCaption"></figcaption>
+      </figure>
 
-      renderDots();
-    }
+      <div class="pav-info">
+        <div class="pav-head">
+          <div class="pav-name-zh" id="pavNameZh"></div>
+          <div class="pav-name-en" id="pavNameEn"></div>
+        </div>
 
-    function nextCharacter() {
-      currentPavilionIdx = (currentPavilionIdx + 1) % galleryItems.length;
-      updatePavilionData();
-      playTone(galleryItems[currentPavilionIdx].toneFreq, 0.15);
-      vibrate([12]);
-    }
+        <div class="resonance">
+          <div class="reso-head">
+            <span class="reso-label mono">RESONANCE · 共鸣波形</span>
+            <button class="reso-btn" id="resoBtn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor"/></svg>
+              <span>聆听</span>
+            </button>
+          </div>
+          <canvas id="waveCanvas" width="600" height="72" aria-hidden="true"></canvas>
+        </div>
 
-    function prevCharacter() {
-      currentPavilionIdx = (currentPavilionIdx - 1 + galleryItems.length) % galleryItems.length;
-      updatePavilionData();
-      playTone(galleryItems[currentPavilionIdx].toneFreq, 0.15);
-      vibrate([12]);
-    }
+        <div class="meta-grid">
+          <div class="meta-win"><div class="meta-title mono">PERSONALITY</div><div class="meta-val" id="metaPersonality"></div></div>
+          <div class="meta-win"><div class="meta-title mono">BIRTH MARK</div><div class="meta-val" id="metaBirthday"></div></div>
+          <div class="meta-win"><div class="meta-title mono">ELEMENT</div><div class="meta-val" id="metaElement"></div></div>
+          <div class="meta-win"><div class="meta-title mono">RESONANCE</div><div class="meta-val mono" id="metaFreq"></div></div>
+        </div>
 
-    function jumpToCharacter(i) {
-      currentPavilionIdx = i;
-      updatePavilionData();
-      playTone(galleryItems[i].toneFreq, 0.15);
-      vibrate([10]);
-    }
+        <div class="story">
+          <div class="story-mark" aria-hidden="true">“</div>
+          <p class="story-quote" id="pavQuote"></p>
+          <p class="story-text" id="pavStory"></p>
+        </div>
 
-    function openLightbox() {
-      lightboxImg.src = galleryItems[currentPavilionIdx].image;
-      lightbox.classList.add('open');
-    }
-    function closeLightbox() { lightbox.classList.remove('open'); }
+        <div class="pav-nav">
+          <button class="pav-arrow" id="pavPrev" aria-label="上一位角色">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8.5 12 14 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>上一位</span>
+          </button>
+          <div class="pav-dots" id="pavDots" role="tablist" aria-label="角色切换"></div>
+          <button class="pav-arrow" id="pavNext" aria-label="下一位角色">
+            <span>下一位</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6 15.5 12 10 18" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
 
-    /* -------------------------------------------------------------
-       精细化手势识别：下拉返回与内容滚动不冲突
-    ------------------------------------------------------------- */
-    let startX = 0, startY = 0, diffX = 0, diffY = 0;
-    let isPullDownEligible = false;
+    </div>
+  </div>
+</section>
 
-    pavilion.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      diffX = 0;
-      diffY = 0;
-      isPullDownEligible = (pavilion.scrollTop <= 0);
-    }, { passive: true });
+<!-- ══════════ 图片放大查看 ══════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="立绘放大查看" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="关闭放大">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <img id="lbImg" alt="立绘放大">
+  <div class="lb-hint mono">滚轮 / 双指缩放 · 拖拽平移 · 点击空白处关闭</div>
+</div>
 
-    pavilion.addEventListener('touchmove', (e) => {
-      diffX = e.touches[0].clientX - startX;
-      diffY = e.touches[0].clientY - startY;
+<noscript>
+  <div class="noscript">本站的沉浸式展厅需要 JavaScript，请开启后访问。</div>
+</noscript>
 
-      if (isPullDownEligible && diffY > 0 && Math.abs(diffY) > Math.abs(diffX) * 1.5) {
-        pavilionContent.style.transform = `translateY(${Math.min(diffY * 0.35, 120)}px)`;
-      }
-    }, { passive: true });
-
-    pavilion.addEventListener('touchend', () => {
-      if (isPullDownEligible && diffY > 80 && Math.abs(diffY) > Math.abs(diffX) * 1.5) {
-        closePavilion();
-      } else if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
-        if (diffX < 0) nextCharacter();
-        else prevCharacter();
-      }
-      pavilionContent.style.transform = 'translateY(0)';
-    }, { passive: true });
-
-    // PC 键盘
-    window.addEventListener('keydown', (e) => {
-      if (lightbox.classList.contains('open')) {
-        if (e.key === 'Escape') closeLightbox();
-        return;
-      }
-      if (!isPavilionOpen) return;
-      if (e.key === 'Escape') closePavilion();
-      if (e.key === 'ArrowRight') nextCharacter();
-      if (e.key === 'ArrowLeft') prevCharacter();
-    });
-
-    /* ==========================================================================
-       10. 漂浮叶语粒子（星尘 + 叶片，随主题变化）
-       ========================================================================== */
-    const canvas = document.getElementById('ambientCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let leafParticles = [];
-    let particleRGB = '72, 114, 94';
-    let leafColor = '#48725e';
-
-    function refreshParticleColor() {
-      const cs = getComputedStyle(document.documentElement);
-      particleRGB = cs.getPropertyValue('--particle-rgb').trim() || '72, 114, 94';
-      leafColor = cs.getPropertyValue('--accent').trim() || '#48725e';
-    }
-    refreshParticleColor();
-    const _origApplyTheme = applyTheme;
-    applyTheme = function (t) {
-      _origApplyTheme(t);
-      refreshParticleColor();
-    };
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    class Stardust {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2.2 + 0.8;
-        this.speedY = -(Math.random() * 0.4 + 0.1);
-        this.speedX = (Math.random() - 0.5) * 0.3;
-        this.alpha = Math.random() * 0.6 + 0.2;
-      }
-      update() {
-        this.y += this.speedY;
-        this.x += this.speedX;
-        if (this.y < 0) this.reset();
-      }
-      draw() {
-        ctx.fillStyle = `rgba(${particleRGB}, ${this.alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    class Leaf {
-      constructor() { this.reset(true); }
-      reset(init) {
-        this.x = Math.random() * canvas.width;
-        this.y = init ? Math.random() * canvas.height : -30;
-        this.size = Math.random() * 9 + 6;
-        this.speedY = Math.random() * 0.55 + 0.25;
-        this.swayAmp = Math.random() * 26 + 10;
-        this.swayFreq = Math.random() * 0.012 + 0.005;
-        this.phase = Math.random() * Math.PI * 2;
-        this.rot = Math.random() * Math.PI * 2;
-        this.rotSpeed = (Math.random() - 0.5) * 0.014;
-        this.alpha = Math.random() * 0.22 + 0.1;
-      }
-      update() {
-        this.y += this.speedY;
-        this.phase += this.swayFreq * 16;
-        this.x += Math.sin(this.phase) * 0.6;
-        this.rot += this.rotSpeed;
-        if (this.y > canvas.height + 40) this.reset(false);
-      }
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rot);
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = leafColor;
-        ctx.beginPath();
-        ctx.moveTo(0, -this.size);
-        ctx.quadraticCurveTo(this.size * 0.7, -this.size * 0.2, 0, this.size);
-        ctx.quadraticCurveTo(-this.size * 0.7, -this.size * 0.2, 0, -this.size);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    for (let i = 0; i < 35; i++) particles.push(new Stardust());
-    for (let i = 0; i < 7; i++) leafParticles.push(new Leaf());
-
-    function loopStardust() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      leafParticles.forEach(l => { l.update(); l.draw(); });
-      requestAnimationFrame(loopStardust);
-    }
-    loopStardust();
-
-    /* ==========================================================================
-       11. 自定义光标（桌面端）
-       ========================================================================== */
-    (function initCursor() {
-      if (!window.matchMedia('(pointer: fine)').matches) return;
-      const dot = document.getElementById('cursorDot');
-      const ring = document.getElementById('cursorRing');
-      let mx = -100, my = -100, rx = -100, ry = -100;
-
-      window.addEventListener('mousemove', (e) => {
-        mx = e.clientX; my = e.clientY;
-        dot.style.left = mx + 'px';
-        dot.style.top = my + 'px';
-        const t = e.target;
-        const interactive = t.closest && t.closest('.card, .chip, .icon-btn, button, .pavilion-visual, .pav-dot');
-        ring.classList.toggle('hovering', !!interactive);
-      });
-
-      (function ringLoop() {
-        rx += (mx - rx) * 0.16;
-        ry += (my - ry) * 0.16;
-        ring.style.left = rx + 'px';
-        ring.style.top = ry + 'px';
-        requestAnimationFrame(ringLoop);
-      })();
-    })();
-
-    /* ==========================================================================
-       12. 滚动行为：导航显隐 / 进度条 / 回到顶部
-       ========================================================================== */
-    const nav = document.getElementById('nav');
-    const scrollProgress = document.getElementById('scrollProgress');
-    const backTop = document.getElementById('backTop');
-    let lastScrollY = 0;
-
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      nav.classList.toggle('scrolled', y > 40);
-      nav.classList.toggle('visible', y > 120);
-
-      if (y > lastScrollY && y > 400 && !isPavilionOpen) nav.classList.remove('visible');
-      else nav.classList.add('visible');
-      lastScrollY = y;
-
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.style.width = (total > 0 ? (y / total) * 100 : 0) + '%';
-      backTop.classList.toggle('show', y > 600);
-    }, { passive: true });
-
-    /* ==========================================================================
-       13. Toast 反馈
-       ========================================================================== */
-    let toastTimer = null;
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      document.getElementById('toastText').textContent = msg;
-      t.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-    }
-
-    /* ==========================================================================
-       启动渲染
-       ========================================================================== */
-    renderFilterBar();
-    renderCards();
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
