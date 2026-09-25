@@ -325,6 +325,7 @@
       tiltQueued = false;
       const c = tiltCard, ev = tiltEv;
       if (!c || !ev) return;
+      c.dataset.hovering = '1';       // 告知重力引擎：这张卡交给指针
       const r = c.getBoundingClientRect();
       const px = clamp((ev.clientX - r.left) / r.width, 0, 1);
       const py = clamp((ev.clientY - r.top) / r.height, 0, 1);
@@ -916,13 +917,27 @@
   let gyroActive = false, gyroGamma = 0, gyroBeta = 45;
   let curRx = 0, curRy = 0;   // 当前平滑角度（逐帧逼近目标，消除传感器原始抖动）
 
+  // 卡片重力倾斜只交给真·触摸设备；桌面端仍归指针 hover 控制，二者不打架
+  const canTiltByGyro = isTouch || (navigator.maxTouchPoints || 0) > 0;
+
   /** 由主循环每帧统一应用，避免 deviceorientation 高频回调里反复写样式 */
   function applyGyroTilt() {
     if (!gyroActive) return;
+
+    // gamma 左右倾斜 (-90~90)，beta 前后倾斜 (平持约 45°)
     const tRy = clamp(gyroGamma * 0.3, -16, 16);
     const tRx = clamp(-(gyroBeta - 45) * 0.3, -14, 14);
     curRy += (tRy - curRy) * 0.12;
     curRx += (tRx - curRx) * 0.12;
+
+    // 全息棱镜反光：反射角与高光位置跟随倾角，倾角越大流光越强（0.30 ~ 0.60）
+    const strength = clamp((Math.abs(curRy) + Math.abs(curRx)) / 24, 0, 1);
+    root.style.setProperty('--foil-angle', ((curRy * 2 - curRx * 2 + 180) % 360).toFixed(1) + 'deg');
+    root.style.setProperty('--foil-x', clamp(50 + curRy * 2.2, 0, 100).toFixed(1) + '%');
+    root.style.setProperty('--foil-y', clamp(50 + curRx * 2.2, 0, 100).toFixed(1) + '%');
+    root.style.setProperty('--foil-opacity', (0.3 + strength * 0.3).toFixed(3));
+    root.style.setProperty('--foil-glow', (0.22 + strength * 0.33).toFixed(3));
+
     if (pavOpen) return;
     const t = `perspective(1100px) rotateY(${curRy.toFixed(2)}deg) rotateX(${curRx.toFixed(2)}deg)`;
     for (const c of grid.children) {          // live 集合，零查询开销
@@ -938,18 +953,14 @@
     const onOrient = (e) => {
       if (e.gamma == null && e.beta == null) return;   // 设备没有真实传感器
       const gamma = e.gamma || 0, beta = e.beta || 0;
-      gyroActive = true;
       gyroGamma = gamma;
       gyroBeta = beta;
 
+      // 极光视差：任何有传感器的设备都生效
       targetPX = clamp(gamma / 35, -1, 1);
       targetPY = clamp((beta - 45) / 35, -1, 1);
 
-      // 全息反光：手机倾斜时整页共享一个反射角，卡片随之流光（首次传感器数据到达即点亮）
-      root.style.setProperty('--foil-angle', ((gamma * 2 + beta * 2 + 180) % 360) + 'deg');
-      root.style.setProperty('--foil-x', clamp((gamma + 30) / 60 * 100, 0, 100) + '%');
-      root.style.setProperty('--foil-y', clamp((beta - 20) / 50 * 100, 0, 100) + '%');
-      root.style.setProperty('--foil-opacity', '0.5');
+      if (canTiltByGyro) gyroActive = true;   // 仅触摸设备启用卡片 3D 倾斜 + 流光
     };
     if ('DeviceOrientationEvent' in window) {
       addEventListener('deviceorientation', onOrient, { passive: true });
@@ -982,7 +993,8 @@
       bindSensors();
     }
   }
-  ['touchstart', 'click'].forEach(ev =>
+  // iOS 13+ 必须在真实用户手势里申请授权，三种入口覆盖点击 / 触摸 / 指针
+  ['touchstart', 'pointerdown', 'click'].forEach(ev =>
     addEventListener(ev, initSensors, { once: true, passive: true })
   );
 
