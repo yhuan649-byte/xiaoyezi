@@ -8,3 +8,16 @@ window.CHARACTERS = [
  {id:'nagi',name:'汐音',subtitle:'海风替我说，你好。',mood:'海风手札 · 暂定名',color:'#496b93',tint:'#e9eef5',quote:'“听，风已经先出发了。”',story:'轻扬的衣角像一面小小的帆。汐音把平常的街道走成通往海边的路，脚步里有明朗的节拍。她相信，只要愿意抬头，每一天都能看见新的蓝色。',tags:['水手服','海风','轻快步调'],details:{'喜欢的事':'沿着海岸散步','随身物件':'喜欢的帽子','名称说明':'本站暂定名'},images:[['1786975241394.png','汐音 · 海风起时']]},
  {id:'snow',name:'雪澪',subtitle:'让世界，暂时轻一点。',mood:'初雪信笺 · 暂定名',color:'#627dc0',tint:'#edf0fb',quote:'“这份小小的安静，分给你。”',story:'雪澪像一页还没有写满的信纸，干净、轻盈，带着淡淡的蓝。她会认真留意那些微小的声音：翻页、落雪，还有朋友轻声说出的愿望。',tags:['银白发色','冰蓝','安静陪伴'],details:{'喜欢的事':'在安静处读信','印象颜色':'透明的冰蓝色','名称说明':'本站暂定名'},images:[['1784728692027.png','雪澪 · 初雪档案']]}
 ];
+
+// 2.0 创作设定：相关人物、交互回想与多语言台词。
+const characterExtras = {
+ leaf: {related:['huanye'],themeTags:['spring-walk','quiet-time'],memory:['树影','春天'],wish:'愿下一站的阳光，刚好照进你的窗。',quotes:{'ja-JP':'次の駅にも、きっと素敵な景色があるね。','en-US':'There will be a lovely view at the next stop, too.'}},
+ huanye: {related:['leaf','nagi'],themeTags:['spring-walk','adventure'],memory:['小路','好奇心'],wish:'今天留一点空白，给不期而遇的惊喜。',quotes:{'ja-JP':'少し遠回りしたら、素敵な発見があるかも。','en-US':'Take a small detour. You might find a surprise.'}},
+ duoduo: {related:['snow'],themeTags:['blue-sky','quiet-time'],memory:['天空','云'],wish:'愿你抬头时，总能找到喜欢的那一朵云。',quotes:{'ja-JP':'ゆっくりでいいよ。雲はまだ遠くに行っていない。','en-US':'Take your time. The clouds have not drifted far.'}},
+ white: {related:['black'],themeTags:['companionship','quiet-time'],memory:['毛绒玩具','窗外'],wish:'不必急着说什么，安静也能被好好听见。',quotes:{'ja-JP':'少しだけ、そばにいられたら嬉しい。','en-US':'Just sitting beside you for a while is enough.'}},
+ black: {related:['white'],themeTags:['companionship','quiet-time'],memory:['靠近','陪伴'],wish:'把疲惫放下，身边的那个位置一直留给你。',quotes:{'ja-JP':'話さなくてもいい。ちゃんと聞いているよ。','en-US':'You do not have to speak. I am listening.'}},
+ nagi: {related:['huanye','duoduo'],themeTags:['blue-sky','adventure'],memory:['海边','蓝色'],wish:'愿风带你去想去的地方，也带你平安回来。',quotes:{'ja-JP':'聞いて。風はもう出発している。','en-US':'Listen. The wind has already set off.'}},
+ snow: {related:['duoduo'],themeTags:['blue-sky','quiet-time'],memory:['信纸','落雪'],wish:'给今天留一页空白，写下只属于你的心事。',quotes:{'ja-JP':'この小さな静けさを、あなたに分けてあげる。','en-US':'Let me share this little moment of quiet with you.'}}
+};
+window.CHARACTERS.forEach(c=>Object.assign(c,characterExtras[c.id]||{}));
+window.THEMES=[{id:'spring-walk',name:'春日漫游',color:'#56856a'},{id:'blue-sky',name:'蓝色心情',color:'#397dab'},{id:'companionship',name:'柔软陪伴',color:'#877087'},{id:'quiet-time',name:'安静时光',color:'#496b93'},{id:'adventure',name:'轻快冒险',color:'#607221'}];
